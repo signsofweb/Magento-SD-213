@@ -27,4 +27,8 @@
 /php.ini.sample
 /.idea/*
 /CHANGELOG.md
+/app/.htaccess
 /app/etc/*
+/app/autoload.php
+/app/bootstrap.php
+/app/functions.php
