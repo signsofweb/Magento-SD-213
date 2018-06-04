@@ -1,0 +1,52 @@
+<div id="table">
+    <h3><?php echo $block->getTitle() ?></h3>
+    <div class="table" data-bind="scope:'table'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+</div>
+
+<!-- 
+<div id="product">
+        <div class="box">
+            <p><a href="#">Nexus AL</a></p>
+            <p>Sku: <strong>1001</strong></p>
+            <p class="price">99</p>
+            <p class="qty">Qty: 100</p>
+            <a class="action add" href="javascript:void(0)">Add To Bag</a>
+        </div>
+        <div class="box">
+            <p><a href="#">Nexus AL</a></p>
+            <p>Sku: <strong>1002</strong></p>
+            <p class="price">88</p>
+            <p class="qty">Qty: 100</p>
+            <a class="action add" href="javascript:void(0)">Add To Bag</a>
+        </div>
+        <div class="box">
+            <p><a href="#">Nexus AL</a></p>
+            <p>Sku: <strong>1003</strong></p>
+            <p class="price">77</p>
+            <p class="qty">Qty: 100</p>
+            <a class="action add" href="javascript:void(0)">Add To Bag</a>
+        </div>
+        <div class="box">
+            <p><a href="#">Nexus AL</a></p>
+            <p>Sku: <strong>1004</strong></p>
+            <p class="price">66</p>
+            <p class="qty">Qty: 100</p>
+            <a class="action add" href="javascript:void(0)">Add To Bag</a>
+        </div>
+</div> -->
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+               "components": {
+                    "table": {
+                        "component": "Sow_Exilee/js/table",
+                        "template" : "Sow_Exilee/table"
+                    }
+                }
+            }
+        }
+    }
+</script>

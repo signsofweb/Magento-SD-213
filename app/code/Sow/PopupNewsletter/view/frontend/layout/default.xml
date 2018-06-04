@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="Sow_PopupNewsletter::js/jquery.bpopup.min.js"/>
+        <css src="Sow_PopupNewsletter::css/style.css" />
+    </head>
+    <body>
+        <referenceContainer name="footer">
+            <block class="Sow\PopupNewsletter\Block\PopupNewsletter" name="footer.popupnewsletter" template="Sow_PopupNewsletter::popup_newsletter.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

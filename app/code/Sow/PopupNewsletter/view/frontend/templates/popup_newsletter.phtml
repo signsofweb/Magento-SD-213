@@ -1,0 +1,91 @@
+<?php
+$config = $block->getPopupConfig();
+$cookie_time = $config->getCookieTime();
+?>
+<?php if($config->getStatus()):?>
+<div id="popup_newsletter" style="background-image: <?php if($config->getBgImage()){echo $block->getBgImage();}else{echo "";}?>;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: <?php if($config->getWidth()){echo $config->getWidth().'px';}else{echo "700px";}?>;
+        height: <?php if($config->getHeight()){echo $config->getHeight().'px';}else{echo "320px";}?>">
+    <div class="popup_news_close">X</div>
+    <div class="popup_content">
+        <?php if($config->getTitle()): ?>
+        <div class="popup title">
+            <h3><?php echo $config->getTitle() ?></h3>
+        </div>
+        <?php endif ?>
+        <?php if($config->getDescription()): ?>
+            <div class="popup description"><?php echo $config->getDescription() ?></div>
+        <?php endif ?>
+        <form action="<?php echo $block->getFormActionUrl()?>" method="POST">
+            <div class="field newsletter">
+                <div class="control">
+                    <input name="email" type="email"
+                           placeholder="<?php /* @escapeNotVerified */ echo __('Enter your email address') ?>"
+                           data-validate="{required:true, 'validate-email':true}"/>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="action subscribe primary" title="<?php /* @escapeNotVerified */ echo __('Subscribe') ?>" type="submit">
+                    <span><?php /* @escapeNotVerified */ echo __('Subscribe') ?></span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="subscribe-bottom">
+        <input type="checkbox" id="dont_show_popup_news_again" name="dont_show_popup_news_again">
+        <label for="dont_show_popup_news_again"><?php echo __("Don't show this popup again")?></label>
+    </div>
+</div>
+<script type ="text/javascript">
+    require([
+        'jquery'
+    ], function(
+        $
+    ){
+        function setCookie(name,value,days)
+        {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                var expires = "; expires="+date.toGMTString();
+            }
+            else var expires = "";
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+        function getCookie(name)
+        {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+        if(getCookie("show_popup_news") != 1){
+            var Popup = $('#popup_newsletter').bPopup({
+                position: ['auto', 'auto'],
+                speed: '450',
+                transition: 'slideDown'
+            });
+            $('.popup_news_close').on('click', function(){
+                Popup.close();
+            });
+        }
+        $( "#newsletter_pop_up form" ).submit(function( event ) {
+            setCookie("show_popup_news",'1',<?php if($cookie_time!='') echo $cookie_time;else echo '1' ?>);
+        });
+
+        $('#dont_show_popup_news_again').on('change', function(){
+            if(getCookie("show_popup_news") != <?php if($cookie_time!='') echo $cookie_time;else echo '1' ?>){
+                setCookie("show_popup_news",'1',<?php if($cookie_time!='') echo $cookie_time;else echo '1' ?>)
+            }else{
+                setCookie("show_popup_news",'0',<?php if($cookie_time!='') echo $cookie_time;else echo '1' ?>)
+            }
+        });
+    });
+</script>
+<?php endif ?>
