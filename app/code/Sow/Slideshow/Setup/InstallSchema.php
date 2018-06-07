@@ -34,23 +34,8 @@ class InstallSchema implements InstallSchemaInterface
                 ->addColumn('slider_order', Table::TYPE_INTEGER, 10, ['nullable' => true], 'Slider order')
                 ->addColumn('slider_status', Table::TYPE_INTEGER, 1, ['nullable' => true,'default' => '1'], 'Slider status')
                 ->addColumn('slider_cms_id', Table::TYPE_INTEGER, null, ['nullable' => true], 'Cms block id')
+                ->addColumn('store_ids', Table::TYPE_TEXT, '64k', ['unsigned' => true, 'nullable' => false, 'default' => null], 'Store IDs')
                 ->setComment('Slider Table');
-            $installer->getConnection()->createTable($table);
-        }
-        /**
-         * Create table 'sow_slideshow_store'
-         */
-        $installer->getConnection()->dropTable($installer->getTable('sow_slider_store'));
-        if (!$installer->tableExists('sow_slider_store')) {
-            $table = $installer->getConnection()->newTable($installer->getTable('sow_slider_store'))
-                ->addColumn('slider_id', \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT, null, ['nullable' => false, 'primary' => true], 'Slider ID')
-                ->addColumn('store_id', \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT, null, ['unsigned' => true, 'nullable' => false, 'primary' => true], 'Store ID')
-                ->addIndex($installer->getIdxName('sow_slider_store', ['store_id']), ['store_id'])
-                ->addForeignKey($installer->getFkName('sow_slider_store', 'slider_id', 'sow_slider', 'slider_id'), 'slider_id', $installer->getTable('sow_slider'), 'slider_id', \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE)
-                ->addForeignKey($installer->getFkName('sow_slider_store', 'store_id', 'store', 'store_id'), 'store_id', $installer->getTable('store'), 'store_id', \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE)
-            ->setComment(
-                'Sow Slider To Store Linkage Table'
-            );
             $installer->getConnection()->createTable($table);
         }
         $installer->endSetup();

@@ -87,6 +87,13 @@ class Save extends \Magento\Backend\App\Action
                 }
 
             }
+            if (empty($data['store_ids'])) {
+                $data['store_ids'] = 0;
+            }elseif(in_array(0,$data['store_ids'])){
+                $data['store_ids'] = 0;
+            }else{
+                $data['store_ids'] = implode(',',$data['store_ids']);
+            }
 
             /** @var \Sow\Slideshow\Model\Slider $model */
             $model = $this->sliderFactory->create();
