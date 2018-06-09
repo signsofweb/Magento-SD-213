@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="left" htmlTag="div" />
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Sow\Megamenu\Block\Adminhtml\Item\Tree" name="item.tree" template="item/tree.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <!--<uiComponent name="items_form"/>-->
+        </referenceContainer>
+    </body>
+</page>
