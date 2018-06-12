@@ -1,26 +1,15 @@
 <?php
-$items = $block->getMenuItem();
+
+$items = $block->getItems();
+
+$html = $block->drawMenu($items, $parent_id = 0);
+
 ?>
+
 <div id="sow_menu">
-    <ul>
-        <?php if ($items): ?>
-            <?php foreach($items as $item):?>
-                <li><?php echo $item->getItemName(); ?>
-                    <!--     Submenu      -->
-                    <?php if($subItems = $block->getSubItems($item->getItemId())):?>
-                        <ul>
-                        <?php foreach ($subItems as $subItem):?>
-                        <li><?php echo $item->getItemName(); ?>
-
-                        <?php endforeach;?>
-                        </ul>
-                    <?php endif;?>
-                </li>
-
-            <?php endforeach;?>
-        <?php endif; /* End if ($items): */?>
-    </ul>
+    <?php echo $html;?>
 </div>
+
 
 <script>
     require(['jquery'], function($){

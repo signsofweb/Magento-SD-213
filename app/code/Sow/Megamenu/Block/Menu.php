@@ -1,6 +1,6 @@
 <?php
 
-namespace Sow\Megamenu\Block\Adminhtml\Item;
+namespace Sow\Megamenu\Block;
 use Sow\Megamenu\Model\ResourceModel\Item\Collection;
 class Tree extends \Magento\Backend\Block\Template{
     protected $_template = 'item/tree.phtml';
@@ -20,7 +20,7 @@ class Tree extends \Magento\Backend\Block\Template{
 
     public function getItems(){
 
-       return $this->_collection->getData();
+        return $this->_collection->getData();
 
     }
 
