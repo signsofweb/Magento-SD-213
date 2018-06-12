@@ -26,7 +26,7 @@ class Edit extends \Magento\Backend\App\Action
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context, $coreRegistry);
+        parent::__construct($context);
     }
 
     public function initPage(){

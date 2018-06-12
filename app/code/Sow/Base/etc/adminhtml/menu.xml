@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Sow_Base::base" title="TNing" module="Sow_Base" sortOrder="14" resource="Sow_Base::base"/>
+        <add id="Sow_Base::base" title="SOW" module="Sow_Base" sortOrder="14" resource="Sow_Base::base"/>
     </menu>
 </config>

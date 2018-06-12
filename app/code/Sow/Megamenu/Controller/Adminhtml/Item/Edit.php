@@ -12,8 +12,12 @@ class Edit extends \Magento\Backend\App\Action
      */
     protected $resultPageFactory;
 
+    /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
     protected $_coreRegistry;
-
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -26,7 +30,7 @@ class Edit extends \Magento\Backend\App\Action
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context, $coreRegistry);
+        parent::__construct($context);
     }
 
     public function initPage(){

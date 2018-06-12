@@ -25,6 +25,7 @@ class InstallSchema implements InstallSchemaInterface
                 ->newTable($installer->getTable('sow_megamenu'))
                 ->addColumn('item_id', Table::TYPE_SMALLINT, null, ['identity' => true, 'nullable' => false, 'primary' => true], 'Item ID')
                 ->addColumn('item_name', Table::TYPE_TEXT, 255, ['nullable' => false], 'Item name')
+                ->addColumn('parent_id', Table::TYPE_SMALLINT, null, ['nullable' => false,'default' => 0], 'Item name')
                 ->setComment('Megamenu Table');
             $installer->getConnection()->createTable($table);
         }
