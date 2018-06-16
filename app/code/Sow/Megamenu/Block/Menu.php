@@ -2,8 +2,8 @@
 
 namespace Sow\Megamenu\Block;
 use Sow\Megamenu\Model\ResourceModel\Item\Collection;
-class Tree extends \Magento\Backend\Block\Template{
-    protected $_template = 'item/tree.phtml';
+class Menu extends \Magento\Backend\Block\Template{
+
 
     protected $_collection;
     protected $_urlBuilder;
@@ -17,15 +17,16 @@ class Tree extends \Magento\Backend\Block\Template{
         $this->_urlBuilder = $context->getUrlBuilder();
         parent::__construct($context, $data);
     }
-
-    public function getItems(){
-
-        return $this->_collection->getData();
-
+    public function getLv0Item(){
+        return $this->_collection->addFieldToFilter('parent_id',['eq' => 0])->getData();
+    }
+    public function getchildItems($parent_id){
+        return $this->_collection->addFieldToFilter('parent_id',['eq' => $parent_id])->getData();
     }
 
-    public function drawMenu($items, $parent_id = 0, $lv = 1)
+    public function drawSubMenu($items, $parent_id = 0, $lv = 1)
     {
+
         $cate_child = array();
         foreach ($items as $key => $item)
         {
@@ -35,9 +36,11 @@ class Tree extends \Magento\Backend\Block\Template{
                 unset($items[$key]);
             }
         }
+
         $html = '';
         if ($cate_child)
         {
+
             $html.= '<ul>';
             foreach ($cate_child as $key => $item)
             {
@@ -50,7 +53,7 @@ class Tree extends \Magento\Backend\Block\Template{
                 if($this->isParent($item)){
                     $html.= '<div class="open"></div>';
                 }
-                $html.= $this->drawMenu($items, $item['item_id'],$lv +1);
+                $html.= $this->drawSubMenu($items, $item['item_id'],$lv +1);
                 $html.= '</li>';
             }
             $html.= '</ul>';

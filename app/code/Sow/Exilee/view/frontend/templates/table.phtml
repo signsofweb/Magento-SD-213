@@ -1,9 +1,9 @@
-<div id="table">
-    <h3><?php echo $block->getTitle() ?></h3>
-    <div class="table" data-bind="scope:'table'">
-        <!-- ko template: getTemplate() --><!-- /ko -->
-    </div>
-</div>
+<!--<div id="table">-->
+<!--    <h3>--><?php //echo $block->getTitle() ?><!--</h3>-->
+<!--    <div class="table" data-bind="scope:'table'">-->
+<!--        <!-- ko template: getTemplate() --><!-- /ko -->-->
+<!--    </div>-->
+<!--</div>-->
 
 <!-- 
 <div id="product">
@@ -36,17 +36,3 @@
             <a class="action add" href="javascript:void(0)">Add To Bag</a>
         </div>
 </div> -->
-<script type="text/x-magento-init">
-    {
-        "*": {
-            "Magento_Ui/js/core/app": {
-               "components": {
-                    "table": {
-                        "component": "Sow_Exilee/js/table",
-                        "template" : "Sow_Exilee/table"
-                    }
-                }
-            }
-        }
-    }
-</script>
