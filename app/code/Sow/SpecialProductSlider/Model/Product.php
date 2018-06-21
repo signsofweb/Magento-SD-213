@@ -1,6 +1,6 @@
 <?php
 
-namespace Sow\TabProductSlider\Model;
+namespace Sow\SpecialProductSlider\Model;
 
 class Product extends \Magento\Framework\DataObject
 {
@@ -65,5 +65,39 @@ class Product extends \Magento\Framework\DataObject
         parent::__construct($data);
     }
 
+    /**
+     * Speical product collection
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
+     */
+    public function getSpecialProducts($config = [])
+    {
+
+        $objectManager   = \Magento\Framework\App\ObjectManager::getInstance();
+        $visibleProducts = $objectManager->create(
+            '\Magento\Catalog\Model\Product\Visibility'
+        )->getVisibleInCatalogIds();
+        $collection      = $objectManager->create(
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection'
+        )->setVisibility($visibleProducts);
+        $collection      = $this->_addProductAttributesAndPrices($collection)
+            ->addAttributeToFilter(
+                'special_from_date',
+                ['date' => true, 'to' => $this->getEndOfDayDate()], 'left'
+            )->addAttributeToFilter(
+                'special_to_date', ['or' => [0 => ['date' => true,
+                'from' => $this->getStartOfDayDate(
+                )],
+                1 => ['is' => new \Zend_Db_Expr(
+                    'null'
+                )],]], 'left'
+            )->addAttributeToSort(
+                'news_from_date', 'desc'
+            )->addStoreFilter($this->getStoreId())->setPageSize(
+                $this->getProductsCount()
+            );
+
+        return $collection;
+    }
 
 }

@@ -1,8 +1,8 @@
 
 <?php
-$items = $block->getSliderCollection();
-
-foreach ($items as $item){
-    echo $item->getSliderName().'</br>';
+$collection = $block->getSliderCollection();
+foreach ($collection as $slider){
+//    echo '<img src="'. $slider->getSliderImage().'"/>';
+    echo $slider->getSliderImage();
 }
 ?>
