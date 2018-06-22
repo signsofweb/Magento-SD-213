@@ -39,9 +39,12 @@ class Slider extends AbstractModel
     public function getStoreIds(){
         return $this->getData('store_ids');
     }
-    public function getSliderImage(){
+    public function getSliderUrl(){
             $image = $this->getData('slider_image');
             $path = self::SLIDER_URL_MEDIA . $image;
             return $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
+    }
+    public function getSliderName(){
+        return $this->getData('slider_name');
     }
 }

@@ -27,4 +27,18 @@ class Slidershow extends \Magento\Framework\View\Element\Template{
         return $collection;
 
     }
+    public function getDataSlider(){
+        $options = array(
+            'item_md' => 1,
+            'item_sm' => 1,
+            'item_xs' => 1,
+            'dots' => 1,
+            'nav'=> 1,
+            'loop'=> 1,
+            'autoplayHoverPause'=> 1,
+            'autoplaySpeed'=> 3000,
+            'autoplay' => 1,
+        );
+        return json_encode($options);
+    }
 }

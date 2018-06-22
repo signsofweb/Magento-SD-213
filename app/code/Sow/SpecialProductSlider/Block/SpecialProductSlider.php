@@ -42,4 +42,19 @@ class SpecialProductSlider extends AbstractProduct{
     {
         return 'sow_product_slider_onsales';
     }
+
+    public function getDataSlider(){
+        $options = array(
+            'item_md' => 5,
+            'item_sm' => 5,
+            'item_xs' => 1,
+            'dots' => 1,
+            'nav'=> 1,
+            'loop'=> 1,
+            'autoplayHoverPause'=> 1,
+            'autoplaySpeed'=> 3000,
+            'autoplay' => 1,
+        );
+        return json_encode($options);
+    }
 }

@@ -6,6 +6,13 @@
                 <resource id="Sow_Slideshow::slideshow_section" title="Slide Show" sortOrder="10">
                     <resource id="Sow_Slideshow::sliders_manage" title="Manage Sliders" sortOrder="100"/>
                 </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Sow_Slideshow::slideshow_config" title="Slide Show"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

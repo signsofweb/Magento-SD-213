@@ -1,8 +1,14 @@
-
 <?php
 $collection = $block->getSliderCollection();
-foreach ($collection as $slider){
-//    echo '<img src="'. $slider->getSliderImage().'"/>';
-    echo $slider->getSliderImage();
-}
 ?>
+<?php if(count($collection) > 0 ):?>
+<div id="sow_slideshow" class="sow_owlcarousel">
+        <div class="owl-carousel" data-slider='<?php echo $block->getDataSlider()?>'>
+            <?php foreach ($collection as $slider): ?>
+                 <div class="sow_item">
+                     <a href="javascript:void(0)"><img src="<?php echo $slider->getSliderUrl() ?>" alt="<?php echo $slider->getSliderName() ?>"></a>
+                 </div>
+            <?php endforeach ?>
+        </div>
+</div>
+<?php endif; ?>

@@ -3,6 +3,8 @@
     <head>
         <css src="Sow_Base::css/owl.carousel.min.css" />
         <css src="Sow_Base::css/magnific-popup.min.css" />
+        <css src="Sow_Base::css/animate.css" />
+        <css src="Sow_Base::css/font-awesome.min.css" />
         <script src="Sow_Base::js/base.js"/>
     </head>
     <body/>

@@ -21,7 +21,7 @@
     $mode = 'grid';
 
     $image = 'new_products_content_widget_grid';
-    $title = $block->getTitle() ? __($block->getTitle()) : 'Special Products';
+    $title = $block->getTitle() ? __($block->getTitle()) : 'S Products';
     $items = $block->getProductCollection()->getItems();
 
     $showWishlist = true;
@@ -30,14 +30,14 @@
     $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
     $description = false;
     ?>
-    <div id="special_product">
+    <div id="special_product" class="sow_owlcarousel">
         <?php if ($title):?>
             <div class="block-title">
                 <strong><?php /* @escapeNotVerified */ echo $title; ?></strong>
             </div>
         <?php endif ?>
         <div class="block-content">
-                <ol class="product-items owl-carousel">
+                <ol class="product-items owl-carousel" data-slider='<?php echo $block->getDataSlider() ?>'>
                     <?php $iterator = 1; ?>
                     <?php foreach ($items as $_item): ?>
                         <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
