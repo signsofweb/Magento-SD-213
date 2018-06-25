@@ -4,6 +4,7 @@ use Sow\Base\Block\Products\AbstractProduct;
 
 class SpecialProductSlider extends AbstractProduct{
     protected $_template = 'specialproductslider.phtml';
+
     /**
      * Get product collection on sale
      *
@@ -30,10 +31,7 @@ class SpecialProductSlider extends AbstractProduct{
                 'news_from_date', 'desc'
             )->addStoreFilter($this->getStoreId())->setPageSize(
                 $this->getProductsCount()
-            )->addAttributeToSelect('special_price')
-            ->addAttributeToFilter('special_price',array('neq'=> null))
-            ->addAttributeToFilter('price',array('neq'=> null));
-            $collection->getSelect()->where('at_special_price.value' ,array('neq' => 'at_price.value'));
+            );
         return $collection;
     }
 
@@ -42,7 +40,9 @@ class SpecialProductSlider extends AbstractProduct{
     {
         return 'sow_product_slider_onsales';
     }
-
+    public function getProductsCount(){
+        return 10;
+    }
     public function getDataSlider(){
         $options = array(
             'item_md' => 5,
@@ -50,10 +50,10 @@ class SpecialProductSlider extends AbstractProduct{
             'item_xs' => 1,
             'dots' => 1,
             'nav'=> 1,
-            'loop'=> 1,
-            'autoplayHoverPause'=> 1,
+            'loop'=> 0,
+            'autoplayHoverPause'=> 0,
             'autoplaySpeed'=> 3000,
-            'autoplay' => 1,
+            'autoplay' => 0,
         );
         return json_encode($options);
     }

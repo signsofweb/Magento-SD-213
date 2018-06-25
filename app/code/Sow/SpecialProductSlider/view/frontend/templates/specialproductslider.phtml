@@ -38,9 +38,7 @@
         <?php endif ?>
         <div class="block-content">
                 <ol class="product-items owl-carousel" data-slider='<?php echo $block->getDataSlider() ?>'>
-                    <?php $iterator = 1; ?>
                     <?php foreach ($items as $_item): ?>
-                        <?php /* @escapeNotVerified */ echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <div class="product-item-info">
                             <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>" class="product-item-photo">
                                 <?php echo $block->getImage($_item, $image)->toHtml(); ?>
@@ -116,19 +114,9 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
+
                     <?php endforeach ?>
                 </ol>
         </div>
     </div>
 <?php endif;?>
-<script>
-    require(['jquery', 'owlcarousel'], function ($) {
-        $('.owl-carousel').owlCarousel({
-            margin:0,
-            loop:true,
-            autoWidth:true,
-            items:4
-        })
-    });
-</script>

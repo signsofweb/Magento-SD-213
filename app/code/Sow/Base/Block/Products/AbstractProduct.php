@@ -71,7 +71,7 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
 
 	protected $_allOptions;
 
-	public $productCacheKey = 'mageplaza_product_slider_cache';
+	public $productCacheKey = 'sow_product_slider_cache';
 
 	/**
 	 * @param \Magento\Catalog\Block\Product\Context $context

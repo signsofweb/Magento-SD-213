@@ -30,11 +30,9 @@ require([
             autoplaySpeed: 3000,
             autoplay:1
         };
-        console.log(options);
         if ( $(this).attr('data-slider') !=undefined){
             options = JSON.parse($(this).attr('data-slider'));
         }
-        console.log(options);
         $(this).owlCarousel({
             animateIn: 'fadeOutRight',
             animateOut: 'fadeInLeft',
