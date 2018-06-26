@@ -1,9 +1,22 @@
 <?php
 namespace Sow\SpecialProductSlider\Block;
 use Sow\Base\Block\Products\AbstractProduct;
+use Sow\SpecialProductSlider\Model\Config;
 
 class SpecialProductSlider extends AbstractProduct{
     protected $_template = 'specialproductslider.phtml';
+    public function __construct(
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
+        \Magento\Framework\App\Http\Context $httpContext,
+        \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
+        \Magento\CatalogWidget\Model\Rule $rule, \Magento\Widget\Helper\Conditions $conditionsHelper,
+        array $data = []
+    )
+    {
+        parent::__construct($context, $productCollectionFactory, $catalogProductVisibility, $httpContext, $sqlBuilder, $rule, $conditionsHelper, $data);
+    }
 
     /**
      * Get product collection on sale
