@@ -10,31 +10,31 @@ class Config {
      */
     const XML_PATH_ENABLED ='popupnewsletter/popup_newsletter/status';
     /**
-     * Configuration path to Popup Newsletter is title flag
+     * Configuration path to Popup Newsletter title
      */
     const XML_PATH_POPUP_TITLE ='popupnewsletter/popup_newsletter/popup_title';
     /**
-     * Configuration path to Popup Newsletter is description flag
+     * Configuration path to Popup Newsletter description
      */
     const XML_PATH_POPUP_DESCRIPTION ='popupnewsletter/popup_newsletter/popup_description';
     /**
-     * Configuration path to Popup Newsletter is width flag
+     * Configuration path to Popup Newsletter width
      */
     const XML_PATH_POPUP_WIDTH ='popupnewsletter/popup_newsletter/popup_width';
     /**
-     * Configuration path to Popup Newsletter is height flag
+     * Configuration path to Popup Newsletter height
      */
     const XML_PATH_POPUP_HEIGHT ='popupnewsletter/popup_newsletter/popup_height';
     /**
-     * Configuration path to Popup Newsletter is background image flag
+     * Configuration path to Popup Newsletter background image
      */
     const XML_PATH_POPUP_BG_IMAGE ='popupnewsletter/popup_newsletter/bg_image';
     /**
-     * Configuration path to Popup Newsletter is static block flag
+     * Configuration path to Popup Newsletter static block
      */
     const XML_PATH_POPUP_STATIC_BLOCK ='popupnewsletter/popup_newsletter/static_block';
     /**
-     * Configuration path to Popup Newsletter is cookie time flag
+     * Configuration path to Popup Newsletter cookie time
      */
     const XML_PATH_POPUP_COOKIE_TIME ='popupnewsletter/popup_newsletter/cookie_time';
     /**

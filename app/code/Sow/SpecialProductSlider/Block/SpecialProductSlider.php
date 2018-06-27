@@ -5,6 +5,7 @@ use Sow\SpecialProductSlider\Model\Config;
 
 class SpecialProductSlider extends AbstractProduct{
     protected $_template = 'specialproductslider.phtml';
+    protected $_config;
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
@@ -12,14 +13,24 @@ class SpecialProductSlider extends AbstractProduct{
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\CatalogWidget\Model\Rule $rule, \Magento\Widget\Helper\Conditions $conditionsHelper,
+        Config $config,
         array $data = []
     )
     {
+        $this->_config = $config;
         parent::__construct($context, $productCollectionFactory, $catalogProductVisibility, $httpContext, $sqlBuilder, $rule, $conditionsHelper, $data);
+    }
+    /*
+     * Get Status
+     * return bolone
+     * */
+
+    public function getStatus(){
+        return $this->_config->getStatus();
     }
 
     /**
-     * Get product collection on sale
+     * Get product collection
      *
      * @return $this
      */
@@ -51,7 +62,14 @@ class SpecialProductSlider extends AbstractProduct{
 
     public function getProductCacheKey()
     {
-        return 'sow_product_slider_onsales';
+        return 'sow_special_product_slider';
+    }
+
+    public function getTitle(){
+        return $this->_config->getTitle();
+    }
+    public function getDescription(){
+        return $this->_config->getDescription();
     }
     public function getProductsCount(){
         return 10;
@@ -70,4 +88,6 @@ class SpecialProductSlider extends AbstractProduct{
         );
         return json_encode($options);
     }
+
+
 }
