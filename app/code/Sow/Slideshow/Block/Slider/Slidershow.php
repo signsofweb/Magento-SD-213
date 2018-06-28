@@ -10,12 +10,11 @@ class Slidershow extends \Magento\Framework\View\Element\Template{
     public function __construct(
         Collection $sliderCollection,
         Template\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
     )
     {
         $this->sliderCollection = $sliderCollection;
-        $this->_storeManager = $storeManager;
+        $this->_storeManager = $context->getStoreManager();
         parent::__construct($context, $data);
     }
     public function getSliderCollection(){

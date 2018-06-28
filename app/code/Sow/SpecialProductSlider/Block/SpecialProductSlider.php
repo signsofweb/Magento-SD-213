@@ -6,6 +6,7 @@ use Sow\SpecialProductSlider\Model\Config;
 class SpecialProductSlider extends AbstractProduct{
     protected $_template = 'specialproductslider.phtml';
     protected $_config;
+    protected $_urlHelper;
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
@@ -13,11 +14,13 @@ class SpecialProductSlider extends AbstractProduct{
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\CatalogWidget\Model\Rule $rule, \Magento\Widget\Helper\Conditions $conditionsHelper,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
         Config $config,
         array $data = []
     )
     {
         $this->_config = $config;
+        $this->_urlHelper = $urlHelper;
         parent::__construct($context, $productCollectionFactory, $catalogProductVisibility, $httpContext, $sqlBuilder, $rule, $conditionsHelper, $data);
     }
     /*
@@ -54,7 +57,7 @@ class SpecialProductSlider extends AbstractProduct{
             ->addAttributeToSort(
                 'news_from_date', 'desc'
             )->addStoreFilter($this->getStoreId())->setPageSize(
-                $this->getProductsCount()
+                $this->getProductCount()
             );
         return $collection;
     }
@@ -69,25 +72,37 @@ class SpecialProductSlider extends AbstractProduct{
         return $this->_config->getTitle();
     }
     public function getDescription(){
-        return $this->_config->getDescription();
+        return ($this->_config->getDescription())? $this->_config->getDescription() : 10;
     }
-    public function getProductsCount(){
-        return 10;
+
+    public function getProductCount(){
+        return $this->_config->getProductCount();
     }
     public function getDataSlider(){
         $options = array(
-            'item_md' => 5,
-            'item_sm' => 5,
-            'item_xs' => 1,
-            'dots' => 1,
-            'nav'=> 1,
-            'loop'=> 0,
-            'autoplayHoverPause'=> 0,
-            'autoplaySpeed'=> 3000,
-            'autoplay' => 0,
+            'item_md' => $this->_config->getMaxItem(),
+            'item_sm' => $this->_config->getMediumItem(),
+            'item_xs' => $this->_config->getMinItem(),
+            'dots' => $this->_config->getDots(),
+            'nav'=> $this->_config->getNav(),
+            'loop'=> $this->_config->getLoop(),
+            'autoplayHoverPause'=> $this->_config->getAutoPlayHoverPause(),
+            'autoplaySpeed'=> $this->_config->getAutoPlaySpeed(),
+            'autoplay' => $this->_config->getAutoPlay()
         );
         return json_encode($options);
     }
 
-
+    public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
+    {
+        $url = $this->getAddToCartUrl($product);
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => $product->getEntityId(),
+                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED =>
+                    $this->_urlHelper->getEncodedUrl($url),
+            ]
+        ];
+    }
 }

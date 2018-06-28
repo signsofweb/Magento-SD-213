@@ -1,14 +1,3 @@
-require([
-    'jquery',
-], function($) {
-    'use strict';
-    $('.back-to-top').click(function() { // When arrow is clicked
-        $('body,html').animate({
-            scrollTop: 0 // Scroll to top of body
-        }, 500);
-        return false;
-    });
-})
 /*
 ========== Slider Owl  ==========
 */
@@ -139,4 +128,30 @@ require([
 });
 /*
 ========== End Popup Newsletter ==========
+*/
+/*
+========== Scroll Top =====================
+*/
+
+require([
+    'jquery',
+], function($) {
+    'use strict';
+    var scrollTime;
+    $(window).scroll(function(){
+        clearTimeout(scrollTime);
+        scrollTime = setTimeout(function(){
+            if(jQuery(this).scrollTop() > 100){
+                $('#to_top').fadeIn();
+            }else{
+                $('#to_top').fadeOut();
+            }
+        }, 200);
+    });
+    $('#to_top').click(function () {
+        $('html, body').animate({scrollTop: 0}, 600);
+    });
+})
+/*
+========== End Scroll Top =====================
 */

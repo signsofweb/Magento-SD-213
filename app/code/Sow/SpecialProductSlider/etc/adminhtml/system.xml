@@ -37,18 +37,22 @@
                 </field>
                 <field id="product_count" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product count</label>
+                    <validate>validate-number</validate>
                     <comment><![CDATA[The item is showing. ]]></comment>
                 </field>
                 <field id="max_item" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Max item</label>
+                    <validate>validate-number</validate>
                     <comment><![CDATA[The column is showing on desstop screen. ]]></comment>
                 </field>
                 <field id="medium_item" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Medium item</label>
+                    <validate>validate-number</validate>
                     <comment><![CDATA[The column is showing on tablet. ]]></comment>
                 </field>
                 <field id="min_item" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Min item</label>
+                    <validate>validate-number</validate>
                     <comment><![CDATA[The column is showing on mobile. ]]></comment>
                 </field>
                 <field id="row_item" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -77,6 +81,7 @@
                 </field>
                 <field id="autoplayspeed" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Auto play speed</label>
+                    <validate>validate-number</validate>
                     <depends>
                         <field id="autoplay">1</field>
                     </depends>
