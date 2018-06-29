@@ -21,7 +21,6 @@ use Magento\Framework\App\Action\Action;
         $description = $block->getDescription() ? __($block->getDescription()) : '';
         $image = 'new_products_content_widget_list';
         $items = $block->getProductCollection()->getItems();
-        $helper = $this->helper('Sow\Base\Helper\Checknew');
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
         ?>
         <div id="special_product" class="sow_owlcarousel">
@@ -41,12 +40,27 @@ use Magento\Framework\App\Action\Action;
                                 <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>">
                                     <?php echo $block->getImage($_item, $image)->toHtml(); ?>
                                 </a>
+                                <!-- New Label -->
                                 <?php
-                                $isnew = $helper->checkProductIsNew($_item);
+                                $isNew = $this->checkProductIsNew($_item);
                                 ?>
-                                <?php if($isnew):?>
+                                <?php if($isNew):?>
                                     <div class="sow-label new-label"><?php echo __('new'); ?></div>
                                 <?php endif; ?>
+                                <!--  Sale Label -->
+                                <?php
+                                $isSale = $this->checkProductIsSale($_item);
+                                ?>
+                                <?php if($isSale):?>
+                                    <div class="sow-label sale-label"><?php echo __('sale'); ?></div>
+                                <?php endif; ?>
+                                <!-- Show count down -->
+                                <?php
+                                $countDown = $this->checkCountDownTimer($_item);
+                                ?>
+                                <?php if($countDown['isCountDown']):?>
+                                        <div class="count-down" data-time="<?php echo $countDown['time']?>"></div>
+                                <?php endif ?>
                             </div>
                             <div class="sow-item-details">
                                 <div class="sow-item-name">

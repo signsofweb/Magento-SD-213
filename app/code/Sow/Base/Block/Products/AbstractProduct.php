@@ -362,5 +362,54 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
 
 		return $objectManager->create('\Magento\Catalog\Block\Product\Context')->getStoreManager()->getStore()->getId();
 	}
+    public function checkProductIsNew($_product = null) {
+        $from_date = $_product->getNewsFromDate();
+        $to_date = $_product->getNewsToDate();
+        $is_new = false;
+        $today = strtotime("now");
+        if ($from_date && $to_date) {
+            $from_date = strtotime($from_date);
+            $to_date = strtotime($to_date);
+            if ($from_date <= $today && $to_date >= $today) {
+                $is_new = true;
+            }
+        }
+        elseif ($from_date && !$to_date) {
+            $from_date = strtotime($from_date);
+            if ($from_date <= $today) {
+                $is_new = true;
+            }
+        }elseif (!$from_date && $to_date) {
+            $to_date = strtotime($to_date);
+            if ($to_date >= $today) {
+                $is_new = true;
+            }
+        }
+        return $is_new;
+    }
+    public function checkProductIsSale($_product = null){
+        $specialprice = $_product->getSpecialPrice();
+        $oldPrice = $_product->getPrice();
+        $specialPriceFromDate = $_product->getSpecialFromDate();
+        $specialPriceToDate = $_product->getSpecialToDate();
+        $today =  time();
+        if ($specialprice < $oldPrice) {
+            if($today >= strtotime( $specialPriceFromDate) && $today <= strtotime($specialPriceToDate) || $today >= strtotime( $specialPriceFromDate) && is_null($specialPriceToDate)) {
+               return true;
+            }
+        }
+        return false;
+    }
+    public function checkCountDownTimer($_product = null){
+        $specialPriceToDate = $_product->getSpecialToDate();
+        $today =  time();
+        $res = array();
+        $res['isCountDown'] = false;
+        if ($specialPriceToDate && $today <= strtotime($specialPriceToDate)){
+            $res['time'] = $specialPriceToDate;
+            $res['isCountDown'] = true;
+        }
+        return $res;
+    }
 
 }

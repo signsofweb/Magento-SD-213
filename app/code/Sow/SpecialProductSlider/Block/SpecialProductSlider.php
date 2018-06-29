@@ -55,7 +55,7 @@ class SpecialProductSlider extends AbstractProduct{
                                                         1 => ['is' => new \Zend_Db_Expr('null')],]], 'left'
             )
             ->addAttributeToSort(
-                'news_from_date', 'desc'
+                'news_from_date', 'ASC'
             )->addStoreFilter($this->getStoreId())->setPageSize(
                 $this->getProductCount()
             );
