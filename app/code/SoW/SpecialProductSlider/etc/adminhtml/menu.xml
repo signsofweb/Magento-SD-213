@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SoW_SpecialProductSlider::specialproductslider_section" title="Special Product Slider" module="SoW_SpecialProductSlider" sortOrder="20" parent="SoW_Base::base" resource="SoW_SpecialProductSlider::specialproductslider_section"/>
+        <add id="SoW_SpecialProductSlider::specialproductslider_configuration" title="Configuration" module="SoW_SpecialProductSlider" sortOrder="10" parent="SoW_SpecialProductSlider::specialproductslider_section" action="adminhtml/system_config/edit/section/specialproductslider" resource="SoW_SpecialProductSlider::specialproductslider_configuration"/>
+    </menu>
+</config>

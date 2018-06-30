@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Sow_PopupNewsletter::popupnewsletter_section" title="Popup Newsletter" module="Sow_PopupNewsletter" sortOrder="10" parent="Sow_Base::base" resource="Sow_PopupNewsletter::popupnewsletter_configuration"/>
-        <add id="Sow_PopupNewsletter::popupnewsletter_configuration" title="Configuration" module="Sow_PopupNewsletter" sortOrder="10" parent="Sow_PopupNewsletter::popupnewsletter_section" action="adminhtml/system_config/edit/section/popupnewsletter" resource="Sow_PopupNewsletter::popupnewsletter_configuration"/>
-    </menu>
-</config>

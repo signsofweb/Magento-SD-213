@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SoW_Slideshow::slideshow_section" title="Slide Show" module="SoW_Slideshow" sortOrder="20" parent="SoW_Base::base" resource="SoW_Slideshow::slideshow_section"/>
+        <add id="SoW_Slideshow::sliders_manage" title="Manage Sliders" module="SoW_Slideshow" sortOrder="10" parent="SoW_Slideshow::slideshow_section" action="slideshow/slider/index" resource="SoW_Slideshow::sliders_manage"/>
+    </menu>
+</config>

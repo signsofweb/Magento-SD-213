@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SoW_Megamenu::megamenu_section" title="Megamenu" module="SoW_Megamenu" sortOrder="20" parent="SoW_Base::base" resource="SoW_Megamenu::megamenu_section"/>
+        <add id="SoW_Megamenu::sliders_manage" title="Manage Megamenu" module="SoW_Megamenu" sortOrder="10" parent="SoW_Megamenu::megamenu_section" action="megamenu/item/index" resource="SoW_Megamenu::megamenu_manage"/>
+    </menu>
+</config>
