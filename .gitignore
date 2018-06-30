@@ -32,3 +32,9 @@
 /app/autoload.php
 /app/bootstrap.php
 /app/functions.php
+/.github/*
+/.php_cs.dist
+/auth.json.sample
+/composer-setup.php
+/generated/*
+/grunt-config.json.sample
