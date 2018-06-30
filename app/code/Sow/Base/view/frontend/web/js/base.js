@@ -33,16 +33,22 @@ require([
             dots: options.dots,
             navText: ['<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>'],
             responsive: {
-                480: {
+                0:{
                     items: 1,
-
                 },
-                768: {
+                320:{
+                    items: 1,
+                },
+                480: {
                     items: options.item_xs,
 
                 },
-                992: {
+                768: {
                     items: options.item_sm,
+
+                },
+                992: {
+                    items: options.item_md,
 
                 },
                 1200: {
@@ -159,7 +165,6 @@ require([
 /*
 ========== Count Down Timer =====================
 */
-
 require([
     'jquery',
 ], function ($) {
@@ -168,7 +173,6 @@ require([
         var el = $(this);
         var time = $(this).attr('data-time');
         var countDownDate = new Date(time).getTime();
-        console.log(countDownDate);
         // Update the count down every 1 second
         var x = setInterval(function () {
             // Get todays date and time
@@ -191,5 +195,5 @@ require([
     });
 })
 /*
-========== End Scroll Top =====================
+========== End Count Down Timer =====================
 */

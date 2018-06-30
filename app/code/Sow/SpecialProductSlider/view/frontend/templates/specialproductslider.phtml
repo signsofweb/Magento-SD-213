@@ -70,7 +70,10 @@ use Magento\Framework\App\Action\Action;
                                     </a>
                                 </div>
                                 <?php echo $block->getProductPriceHtml($_item) ?>
-                                <?php echo $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?php
+
+                                echo $block->getReviewsSummaryHtml($_item)
+                                ?>
                                 <div class="sow-item-actions">
                                     <!--  Add to cart -->
                                     <?php if ($_item->isSaleable()): ?>
@@ -110,6 +113,8 @@ use Magento\Framework\App\Action\Action;
                                        title="<?php /* @escapeNotVerified */ echo __('Add to Compare') ?>">
                                         <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
                                     </a>
+                                    <!--Quick view-->
+                                    <a href="javascript:void(0)" class="action quickview"><i class="fa fa-eye"></i><?php /* @escapeNotVerified */ echo __('Quick view') ?></a>
                                 </div>
                             </div>
                         </div>

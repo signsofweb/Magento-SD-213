@@ -308,6 +308,13 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
 
 		return '';
 	}
+    public function getReviewsSummaryHtml(
+        \Magento\Catalog\Model\Product $product,
+        $templateType = true,
+        $displayIfNoReviews = true
+    ) {
+        return $this->reviewRenderer->getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
+    }
 
 	/**
 	 * Return identifiers for produced content
@@ -359,7 +366,6 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
 	public function getStoreId()
 	{
 		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-
 		return $objectManager->create('\Magento\Catalog\Block\Product\Context')->getStoreManager()->getStore()->getId();
 	}
     public function checkProductIsNew($_product = null) {
