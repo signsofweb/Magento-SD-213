@@ -19,15 +19,13 @@ require([
             autoplaySpeed: 3000,
             autoplay: 1
         };
+
         var new_options = JSON.parse($(this).attr('data-slider'));
         $.each(new_options,function(i,option) {
-            if(option == null){
-                new_options.i = options.i;
+            if(option != null){
+               options[i] = new_options[i];
             }
         })
-        if (new_options != null) {
-             options = new_options;
-        }
         $(this).owlCarousel({
             animateIn: 'fadeOutRight',
             animateOut: 'fadeInLeft',
