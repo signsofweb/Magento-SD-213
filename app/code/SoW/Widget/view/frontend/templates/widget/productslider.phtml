@@ -1,19 +1,7 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 use Magento\Framework\App\Action\Action;
-// @codingStandardsIgnoreFile
-?>
-<?php
-/**
- * Template for displaying products list widget
- *
- * @var $block \Magento\CatalogWidget\Block\Product\ProductsList
- */
-?>
 
+?>
 <?php if (true): ?>
     <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
         <?php
@@ -71,11 +59,9 @@ use Magento\Framework\App\Action\Action;
                                 </div>
                                 <?php echo $block->getProductPriceHtml($_item) ?>
                                 <?php
-
                                 echo $block->getReviewsSummaryHtml($_item)
                                 ?>
-                                <?php echo $this->getLayout()->createBlock('Magento\Swatches\Block\Product\Renderer\Listing\Configurable')->setProduct($_item)->setTemplate('Magento_Swatches::product/listing/renderer.phtml')->toHtml();
-                                ?>
+
                                 <div class="sow-item-actions">
                                     <!--  Add to cart -->
                                     <?php if ($_item->isSaleable()): ?>

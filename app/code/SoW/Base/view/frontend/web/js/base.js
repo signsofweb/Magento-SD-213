@@ -33,6 +33,7 @@ require([
             autoplaySpeed: options.autoplaySpeed,
             autoplayHoverPause: options.autoplayHoverPause,
             loop: options.loop,
+            touchDrag: false,
             nav: options.nav,
             dots: options.dots,
             navText: ['<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>'],

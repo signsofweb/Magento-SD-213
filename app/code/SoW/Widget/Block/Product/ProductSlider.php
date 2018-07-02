@@ -27,10 +27,10 @@ class ProductSlider extends AbstractProduct{
             'item_xs' => 2,
             'dots' => 1,
             'nav'=> 1,
-            'loop'=> 1,
-            'autoplayHoverPause'=> 1,
+            'loop'=> 0,
+            'autoplayHoverPause'=> 0,
             'autoplaySpeed'=> 1000,
-            'autoplay' => 1
+            'autoplay' => 0
         );
         return json_encode($options);
     }

@@ -21,44 +21,98 @@ class Product extends \Magento\Framework\DataObject{
         $this->_catalogProductVisibility = $catalogProductVisibility;
         parent::__construct($data);
     }
-
-    public function getSpecialProducts($config = [])
-    {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+    protected function createCollection(){
         $collection = $this->_productCollectionFactory->create();
-        if (isset($config['categories'])) {
-            if ($this->productState->isFlatEnabled()) {
-                $collection->joinField(
-                    'category_id',
-                    $this->_resource->getTableName('catalog_category_product'),
-                    'category_id',
-                    'product_id = entity_id',
-                    'category_id in (' . implode($config['categories'], ",") . ')' ,
-                    'at_category_id.category_id == NULL',
-                    'left'
-                );
-            } else {
-                $collection->joinField(
-                    'category_id', $this->_resource->getTableName('catalog_category_product'), 'category_id',
-                    'product_id = entity_id', null, 'left'
-                )
-                    ->addAttributeToFilter('category_id', array(
-                        array('finset' => $config['categories']),
-                    ));
-            }
-        }
-
-        $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds())
-            ->addAttributeToSelect('*')
-            ->addStoreFilter()
-            ->addMinimalPrice()
-            ->addUrlRewrite()
-            ->addTaxPercents()
-            ->addFinalPrice();
-        $collection->setPageSize(isset($config['pagesize'])?$config['pagesize']:5)
-            ->setCurPage(isset($config['curpage'])?$config['curpage']:1)
-            ->getSelect()->group("e.entity_id");
-        $collection->getSelect()->order("e.entity_id DESC")->where('price_index.final_price < price_index.price');
+        $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
+        return $collection      = $this->_addProductAttributesAndPrices($collection)
+            ->addStoreFilter($this->getStoreId());
+    }
+    public function getSpecialProducts($options = [])
+    {
+        $collection = $this->createCollection();
+        $collection->addAttributeToFilter(
+            'special_from_date',
+            ['date' => true, 'to' => $this->getEndOfDayDate()], 'left'
+        )->addAttributeToFilter(
+            'special_to_date', ['or' => [0 => ['date' => true,
+            'from' => $this->getStartOfDayDate(
+            )],
+            1 => ['is' => new \Zend_Db_Expr(
+                'null'
+            )],]], 'left'
+        )->addAttributeToSort(
+            'news_from_date', 'desc'
+        );
+        $collection ->setPageSize(isset($options['products_count'])?$options['products_count']:5)
+                    ->setCurPage(isset($options['curpage'])?$options['curpage']:1)
+                    ->getSelect()->group("e.entity_id");
+        $collection->getSelect()->where('price_index.final_price < price_index.price');
         return $collection;
+    }
+
+    public function getProductCollection($source_key, $config = [])
+    {
+        $collection = '';
+        switch ($source_key) {
+            case 'latest':
+                $collection = $this->getLatestProducts($config);
+                break;
+            case 'new_arrival':
+                $collection = $this->getNewarrivalProducts($config);
+                break;
+            case 'special':
+                $collection = $this->getSpecialProducts($config);
+                break;
+            case 'most_popular':
+                $collection = $this->getMostViewedProducts($config);
+                break;
+            case 'best_seller':
+                $collection = $this->getBestsellerProducts($config);
+                break;
+            case 'top_rated':
+                $collection = $this->getTopratedProducts($config);
+                break;
+            case 'random':
+                $collection = $this->getRandomProducts($config);
+                break;
+            case 'featured':
+                $collection = $this->getFeaturedProducts($config);
+                break;
+            case 'deals':
+                $collection = $this->getDealsProducts($config);
+                break;
+        }
+        return $collection;
+    }
+
+    protected function _addProductAttributesAndPrices(
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+    ) {
+        return $collection
+            ->addMinimalPrice()
+            ->addFinalPrice()
+            ->addTaxPercents()
+            ->addAttributeToSelect('*')
+            ->addUrlRewrite();
+    }
+    public function getStoreId()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        return $objectManager->create('\Magento\Catalog\Block\Product\Context')->getStoreManager()->getStore()->getId();
+    }
+
+    public function getStartOfDayDate()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        return $objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime')->date(null, '0:0:0');
+    }
+
+    public function getEndOfDayDate()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        return $objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime')->date(null, '23:59:59');
     }
 }
