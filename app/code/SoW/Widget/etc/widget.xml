@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="productslider" class="SoW\Widget\Block\Product\ProductSlider">
+        <label translate="true">SoW Product Slider</label>
+        <description></description>
+        <parameters>
+            <parameter name="general_settings_heading" xsi:type="conditions" visible="true" sort_order="0" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
+                <label translate="true">General Settings</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>
+
