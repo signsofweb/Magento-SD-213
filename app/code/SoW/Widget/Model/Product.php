@@ -4,9 +4,13 @@ namespace SoW\Widget\Model;
 class Product extends \Magento\Framework\DataObject{
 
     protected $_productCollectionFactory;
+
     protected $productState;
+
     protected $_resource;
+
     protected $_catalogProductVisibility;
+
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $productState,
@@ -21,12 +25,14 @@ class Product extends \Magento\Framework\DataObject{
         $this->_catalogProductVisibility = $catalogProductVisibility;
         parent::__construct($data);
     }
+
     protected function createCollection(){
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
         return $collection      = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter($this->getStoreId());
     }
+
     public function getSpecialProducts($options = [])
     {
         $collection = $this->createCollection();

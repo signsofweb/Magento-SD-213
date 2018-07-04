@@ -2,16 +2,16 @@
 use Magento\Framework\App\Action\Action;
 
 ?>
-<?php if (true): ?>
+
     <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
         <?php
-        $title = $block->getTitle() ? __($block->getTitle()) : 'S Products';
-        $description = $block->getDescription() ? __($block->getDescription()) : '';
+        $title = $block->getTitle() ? __($block->getTitle()) : 'Widget title';
+        $description = $block->getDescription() ? __($block->getDescription()) : 'Widget description';
         $image = 'new_products_content_widget_list';
         $items = $block->getProductCollection()->getItems();
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
         ?>
-        <div id="special_product" class="sow_owlcarousel">
+        <div class="sow_owlcarousel">
             <?php if ($title): ?>
                 <div class="sow-title">
                     <h3><?php /* @escapeNotVerified */ echo $title; ?></h3>
@@ -111,7 +111,7 @@ use Magento\Framework\App\Action\Action;
             </div>
         </div>
     <?php endif; ?>
-<?php endif; ?>
+
 
 <?php if (!$block->isRedirectToCartEnabled()) : ?>
     <script type="text/x-magento-init">

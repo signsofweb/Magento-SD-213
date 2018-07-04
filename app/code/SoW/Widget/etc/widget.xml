@@ -22,11 +22,17 @@
             </parameter>
             <parameter name="by_source" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="25">
                 <label translate="true">By Source</label>
-                <description><![CDATA[Default is categories for slider.]]></description>
+            </parameter>
+            <parameter name="source" xsi:type="select" visible="true" sort_order="26" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+                <depends><parameter name="by_source" value="1" /></depends>
+            </parameter>
+            <parameter name="categories" xsi:type="select" visible="true" sort_order="26" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Categories</label>
+                <depends><parameter name="by_source" value="0" /></depends>
             </parameter>
             <parameter name="is_vertical" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="30">
                 <label translate="true">Enable Vertical</label>
-                <description><![CDATA[Default is horizontal.]]></description>
             </parameter>
             <parameter name="slider_settings_heading" xsi:type="conditions" visible="true" sort_order="40" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
                 <label translate="true">Slider Settings</label>
@@ -58,7 +64,7 @@
             <parameter name="show_dots" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="100">
                 <label translate="true">Show Dots</label>
             </parameter>
-            <parameter name="show_Nav" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="110">
+            <parameter name="show_nav" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="110">
                 <label translate="true">Show Nav</label>
             </parameter>
             <parameter name="loop" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="120">
