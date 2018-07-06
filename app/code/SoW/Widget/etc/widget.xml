@@ -20,22 +20,17 @@
             <parameter name="widget_description" xsi:type="text" visible="true" sort_order="20">
                 <label translate="true">Description</label>
             </parameter>
-            <parameter name="by_source" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="25">
-                <label translate="true">By Source</label>
-            </parameter>
-            <parameter name="source" xsi:type="select" visible="true" sort_order="26" source_model="SoW\Base\Model\System\Config\Source\Source">
-                <label translate="true">Select Source</label>
-                <depends><parameter name="by_source" value="1" /></depends>
-            </parameter>
-            <parameter name="category" xsi:type="select" visible="true" sort_order="26" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+            <parameter name="category" xsi:type="select" visible="true" sort_order="25" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
                 <label translate="true">Select Category</label>
-                <depends><parameter name="by_source" value="0" /></depends>
             </parameter>
-            <parameter name="is_vertical" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="30">
-                <label translate="true">Enable Vertical</label>
+            <parameter name="source" xsi:type="select" visible="true" sort_order="30" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
             </parameter>
             <parameter name="slider_settings_heading" xsi:type="conditions" visible="true" sort_order="40" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
                 <label translate="true">Slider Settings</label>
+            </parameter>
+            <parameter name="is_vertical" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="45">
+                <label translate="true">Enable Vertical</label>
             </parameter>
             <parameter name="products_count" xsi:type="text" visible="true" sort_order="50">
                 <label translate="true">Products Count</label>

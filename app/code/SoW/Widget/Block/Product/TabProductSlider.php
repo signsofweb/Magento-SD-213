@@ -5,6 +5,11 @@ use Magento\Widget\Block\BlockInterface;
 
 class TabProductSlider extends Template implements BlockInterface{
     protected $_template = 'widget/tabproductslider.phtml';
+
+    public function getFullOptions(){
+        return $options = $this->getData();
+    }
+
     public function getProductSlider($data){
         $html = $this->getLayout()->createBlock('SoW\Widget\Block\Product\ProductSlider')->setData($data)->toHtml();
         return $html;

@@ -31,16 +31,27 @@ class Product extends \Magento\Framework\DataObject{
         parent::__construct($data);
     }
 
-    protected function createCollection(){
+    protected function createCollection($options){
         $collection = $this->_productCollectionFactory->create();
+        if(isset($options['category'])){
+            $collection->joinField(
+                'category_id', $this->_resource->getTableName('catalog_category_product'), 'category_id',
+                'product_id = entity_id', null, 'left'
+            )
+                ->addAttributeToFilter('category_id', array(
+                    array('finset' => $options['category']),
+                ));
+        }
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
-        return $collection      = $this->_addProductAttributesAndPrices($collection)
+
+        $collection      = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter($this->getStoreId());
+        return $collection;
     }
 
     public function getLatestProducts($options = [])
     {
-        $collection = $this->createCollection();
+        $collection = $this->createCollection($options);
         $collection ->setPageSize(isset($options['products_count'])?$options['products_count']:10)
             ->setCurPage(isset($options['curpage'])?$options['curpage']:1)
             ->getSelect()->group("e.entity_id");
@@ -51,7 +62,7 @@ class Product extends \Magento\Framework\DataObject{
     {
         $todayStartOfDayDate = $this->getStartOfDayDate();
         $todayEndOfDayDate = $this->getEndOfDayDate();
-        $collection = $this->createCollection();
+        $collection = $this->createCollection($options);
         $collection->addAttributeToFilter(
             'news_from_date',
             [
@@ -87,7 +98,7 @@ class Product extends \Magento\Framework\DataObject{
 
     public function getSpecialProducts($options = [])
     {
-        $collection = $this->createCollection();
+        $collection = $this->createCollection($options);
         $collection->addAttributeToFilter(
             'special_from_date',
             ['date' => true, 'to' => $this->getEndOfDayDate()], 'left'
@@ -133,7 +144,7 @@ class Product extends \Magento\Framework\DataObject{
     public function getBestsellerProducts($options = [])
     {
         $storeId = $this->getStoreId();
-        $collection = $this->createCollection();
+        $collection = $this->createCollection($options);
         $collection ->joinField(
                 'qty_ordered',
                 $this->_resource->getTableName('sales_bestsellers_aggregated_monthly'),
@@ -150,7 +161,7 @@ class Product extends \Magento\Framework\DataObject{
     }
     public function getRandomProducts($options = [])
     {
-        $collection = $this->createCollection();
+        $collection = $this->createCollection($options);
         $collection ->setPageSize(isset($options['products_count'])?$options['products_count']:5)
             ->setCurPage(isset($options['curpage'])?$options['curpage']:1)
             ->getSelect()->group("e.entity_id");
@@ -159,26 +170,13 @@ class Product extends \Magento\Framework\DataObject{
     }
     public function getFeaturedProducts($options = [])
     {
-        $collection = $this->createCollection();
+        $collection = $this->createCollection($options);
         $collection->addAttributeToFilter(array(array( 'attribute'=>'featured', 'eq' => '1')))
             ->setPageSize(isset($options['products_count'])?$options['products_count']:5)
             ->setCurPage(isset($options['curpage'])?$options['curpage']:1)
             ->getSelect()->group("e.entity_id");
         return $collection;
     }
-    public function getProductsByCategoryId($options){
-        $collection = $this->createCollection();
-
-            $collection->joinField(
-                'category_id', $this->_resource->getTableName('catalog_category_product'), 'category_id',
-                'product_id = entity_id', null, 'left'
-            )
-                ->addAttributeToFilter('category_id', array(
-                    array('finset' => $options['category']),
-                ));
-            return $collection;
-    }
-
 
     protected function _addProductAttributesAndPrices(
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
@@ -210,10 +208,10 @@ class Product extends \Magento\Framework\DataObject{
 
         return $objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime')->date(null, '23:59:59');
     }
-    public function getProductCollectidon($source_key, $options = [])
+    public function getProductCollectidon($options = [])
     {
         $collection = '';
-        switch ($source_key) {
+        switch ($options['source']) {
             case 'latest':
                 $collection = $this->getLatestProducts($options);
                 break;
@@ -232,8 +230,6 @@ class Product extends \Magento\Framework\DataObject{
             case 'random':
                 $collection = $this->getRandomProducts($options);
                 break;
-            default:
-                $collection = $this->getProductsByCategoryId($options);
         }
         return $collection;
     }
