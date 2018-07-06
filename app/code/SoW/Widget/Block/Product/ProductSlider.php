@@ -18,6 +18,7 @@ class ProductSlider extends AbstractProduct{
     }
 
     public function getProductCollection(){
+
         $options = $this->getAllOptions();
         if($this->getOptions('by_source') == 1){
             return $this->_productModel->getProductCollectidon($this->getOptions('source'),$options);

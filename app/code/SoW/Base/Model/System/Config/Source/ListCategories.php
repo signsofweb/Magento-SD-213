@@ -71,7 +71,7 @@ class ListCategories implements \Magento\Framework\Option\ArrayInterface
             if(!isset(self::$tmp[$category->getId()])) {
                 self::$tmp[$category->getId()] = $category->getId();
                 $tmp["value"] = $category->getId();
-                $tmp["label"] = $prefix."(ID:".$category->getId().") ".addslashes($category->getName());
+                $tmp["label"] = $prefix.addslashes($category->getName());
                 $arr[] = $tmp;
                 $subcats = $category->getChildren();
                 if($subcats != ''){ 

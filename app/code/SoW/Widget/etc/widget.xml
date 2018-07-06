@@ -80,5 +80,74 @@
             </parameter>
         </parameters>
     </widget>
+    <widget id="tabproductslider" class="SoW\Widget\Block\Product\TabProductSlider">
+    <label translate="true">SoW Tab Product Slider</label>
+    <description></description>
+        <parameters>
+            <parameter name="general_settings_heading" xsi:type="conditions" visible="true" sort_order="0" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
+                <label translate="true">General Settings</label>
+            </parameter>
+            <parameter name="widget_title" xsi:type="text" visible="true" sort_order="10">
+                <label translate="true">Title</label>
+            </parameter>
+            <parameter name="widget_description" xsi:type="text" visible="true" sort_order="20">
+                <label translate="true">Description</label>
+            </parameter>
+            <!--Tab 1-->
+            <parameter name="tab_settings_heading" xsi:type="conditions" visible="true" sort_order="30" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
+                <label translate="true">Tab Settings</label>
+            </parameter>
+            <parameter name="tabs" xsi:type="conditions" visible="true" sort_order="40" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\FieldArray\TabFieldArray">
+                <label translate="true">Tab Manage</label>
+            </parameter>
+            <parameter name="slider_settings_heading" xsi:type="conditions" visible="true" sort_order="240" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
+                <label translate="true">Slider Settings</label>
+            </parameter>
+            <parameter name="is_vertical" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="245">
+                <label translate="true">Enable Vertical</label>
+            </parameter>
+            <parameter name="products_count" xsi:type="text" visible="true" sort_order="250">
+                <label translate="true">Products Count</label>
+                <value>12</value>
+            </parameter>
+            <parameter name="max_item" xsi:type="text" visible="true" sort_order="260">
+                <label translate="true">Max Item</label>
+                <value>5</value>
+                <description><![CDATA[The column is showing on desstop screen.]]></description>
+            </parameter>
+            <parameter name="medium_item" xsi:type="text" visible="true" sort_order="270">
+                <label translate="true">Medium item</label>
+                <value>3</value>
+                <description><![CDATA[The column is showing on tablet.]]></description>
+            </parameter>
+            <parameter name="min_item" xsi:type="text" visible="true" sort_order="280">
+                <label translate="true">Min item</label>
+                <value>1</value>
+                <description><![CDATA[The column is showing on mobile.]]></description>
+            </parameter>
+            <parameter name="row" xsi:type="text" visible="true" sort_order="290">
+                <label translate="true">Row</label>
+                <value>1</value>
+                <description><![CDATA[The row is showing.]]></description>
+            </parameter>
+            <parameter name="show_dots" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="300">
+                <label translate="true">Show Dots</label>
+            </parameter>
+            <parameter name="show_nav" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="310">
+                <label translate="true">Show Nav</label>
+            </parameter>
+            <parameter name="loop" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="320">
+                <label translate="true">Loop</label>
+            </parameter>
+            <parameter name="autoplay" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="340">
+                <label translate="true">Auto Play</label>
+            </parameter>
+            <parameter name="autoplay_speed" xsi:type="text" visible="true" sort_order="350">
+                <label translate="true">Auto Play Speed</label>
+                <depends><parameter name="autoplay" value="1" /></depends>
+                <value>3000</value>
+            </parameter>
+        </parameters>
+    </widget>
 </widgets>
 
