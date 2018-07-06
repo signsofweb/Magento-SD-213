@@ -15,7 +15,7 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
         parent::_construct();
     }
 
-    public function getConfig($option, $default = '')
+    public function getOptions($option, $default = '')
     {
         if($this->hasData($option))
         {
@@ -23,7 +23,9 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
         }
         return $default;
     }
-
+    public function getAllOptions(){
+        return $options = $this->getData();
+    }
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,
         $priceType = null,

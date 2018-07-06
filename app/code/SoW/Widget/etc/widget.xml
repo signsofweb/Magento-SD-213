@@ -27,8 +27,8 @@
                 <label translate="true">Select Source</label>
                 <depends><parameter name="by_source" value="1" /></depends>
             </parameter>
-            <parameter name="categories" xsi:type="select" visible="true" sort_order="26" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
-                <label translate="true">Select Categories</label>
+            <parameter name="category" xsi:type="select" visible="true" sort_order="26" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
                 <depends><parameter name="by_source" value="0" /></depends>
             </parameter>
             <parameter name="is_vertical" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="30">

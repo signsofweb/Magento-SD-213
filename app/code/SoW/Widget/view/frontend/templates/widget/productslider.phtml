@@ -1,14 +1,14 @@
 <?php
 use Magento\Framework\App\Action\Action;
+$items = $block->getProductCollection()->getItems();
 
 ?>
-
-    <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
+    <?php if (count($items) > 0): ?>
         <?php
         $title = $block->getTitle() ? __($block->getTitle()) : 'Widget title';
         $description = $block->getDescription() ? __($block->getDescription()) : 'Widget description';
         $image = 'new_products_content_widget_list';
-        $items = $block->getProductCollection()->getItems();
+
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
         ?>
         <div class="sow_owlcarousel">

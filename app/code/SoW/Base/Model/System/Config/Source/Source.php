@@ -23,12 +23,6 @@ class Source implements \Magento\Framework\Option\ArrayInterface{
         $sources[] = [
             'value' => 'random',
             'label' => 'Random'];
-        $sources[] = [
-            'value' => 'featured',
-            'label' => 'Featured'];
-        $sources[] = [
-            'value' => 'deals',
-            'label' => 'Deals'];
         return $sources;
     }
 }
