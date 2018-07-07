@@ -88,13 +88,172 @@
             <parameter name="widget_description" xsi:type="text" visible="true" sort_order="20">
                 <label translate="true">Description</label>
             </parameter>
-            <!--Tab 1-->
             <parameter name="tab_settings_heading" xsi:type="conditions" visible="true" sort_order="30" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
                 <label translate="true">Tab Settings</label>
             </parameter>
-            <parameter name="tabs" xsi:type="conditions" visible="true" sort_order="40" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\FieldArray\TabFieldArray">
-                <label translate="true">Tab Manage</label>
+            <!--Tab 1-->
+            <parameter name="tab_1_title" xsi:type="text" visible="true" sort_order="40" required="true">
+                <label translate="true">Tab Title</label>
             </parameter>
+            <parameter name="tab_1_category" xsi:type="select" visible="true" sort_order="41" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
+            </parameter>
+            <parameter name="tab_1_source" xsi:type="select" visible="true" sort_order="42" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+            </parameter>
+            <parameter name="enable_tab_2" xsi:type="select" visible="true" sort_order="43" source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Enable Tab 2</label>
+            </parameter>
+            <!--Tab 2-->
+            <parameter name="tab_2_title" xsi:type="text" visible="true" sort_order="50" required="true">
+                <label translate="true">Tab Title</label>
+                <depends><parameter name="enable_tab_2" value="1" /></depends>
+            </parameter>
+            <parameter name="tab_2_category" xsi:type="select" visible="true" sort_order="51" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
+                <depends><parameter name="enable_tab_2" value="1" /></depends>
+            </parameter>
+            <parameter name="tab_2_source" xsi:type="select" visible="true" sort_order="52" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+                <depends><parameter name="enable_tab_2" value="1" /></depends>
+            </parameter>
+            <parameter name="enable_tab_3" xsi:type="select" visible="true" sort_order="53" source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Enable Tab 3</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                </depends>
+            </parameter>
+            <!--Tab 3-->
+            <parameter name="tab_3_title" xsi:type="text" visible="true" sort_order="60" required="true">
+                <label translate="true">Tab Title</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_3_category" xsi:type="select" visible="true" sort_order="61" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_3_source" xsi:type="select" visible="true" sort_order="62" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="enable_tab_4" xsi:type="select" visible="true" sort_order="63" source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Enable Tab 4</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                </depends>
+            </parameter>
+            <!--Tab 4-->
+            <parameter name="tab_4_title" xsi:type="text" visible="true" sort_order="70">
+                <label translate="true">Tab Title</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_4_category" xsi:type="select" visible="true" sort_order="71" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_4_source" xsi:type="select" visible="true" sort_order="72" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="enable_tab_5" xsi:type="select" visible="true" sort_order="73" source_model="Magento\Config\Model\Config\Source\Yesno">
+            <label translate="true">Enable Tab 5</label>
+            <depends>
+                <parameter name="enable_tab_2" value="1" />
+                <parameter name="enable_tab_3" value="1" />
+                <parameter name="enable_tab_4" value="1" />
+            </depends>
+            </parameter>
+            <!--Tab 5-->
+            <parameter name="tab_5_title" xsi:type="text" visible="true" sort_order="80">
+                <label translate="true">Tab Title</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_5_category" xsi:type="select" visible="true" sort_order="81" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_5_source" xsi:type="select" visible="true" sort_order="82" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="enable_tab_6" xsi:type="select" visible="true" sort_order="83" source_model="Magento\Config\Model\Config\Source\Yesno">
+            <label translate="true">Enable Tab 6</label>
+            <depends>
+                <parameter name="enable_tab_2" value="1" />
+                <parameter name="enable_tab_3" value="1" />
+                <parameter name="enable_tab_4" value="1" />
+                <parameter name="enable_tab_5" value="1" />
+            </depends>
+            </parameter>
+            <!--Tab 6-->
+            <parameter name="tab_6_title" xsi:type="text" visible="true" sort_order="60">
+                <label translate="true">Tab Title</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                    <parameter name="enable_tab_6" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_6_category" xsi:type="select" visible="true" sort_order="61" source_model="SoW\Base\Model\System\Config\Source\ListCategories">
+                <label translate="true">Select Category</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                    <parameter name="enable_tab_6" value="1" />
+                </depends>
+            </parameter>
+            <parameter name="tab_6_source" xsi:type="select" visible="true" sort_order="62" source_model="SoW\Base\Model\System\Config\Source\Source">
+                <label translate="true">Select Source</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                    <parameter name="enable_tab_6" value="1" />
+                </depends>
+            </parameter>
+            <!--End Tabs-->
             <parameter name="slider_settings_heading" xsi:type="conditions" visible="true" sort_order="240" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
                 <label translate="true">Slider Settings</label>
             </parameter>

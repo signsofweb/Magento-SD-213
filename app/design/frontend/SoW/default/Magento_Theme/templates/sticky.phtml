@@ -1,14 +1,38 @@
-
-<h3>
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-</h3>
+<div class="sow-tab-product-slider">
+    <div class="sow-tab-list">
+        <ul>
+            <li><a href="javascript:void(0) " data-title="1">Title 01</a></li>
+            <li><a href="javascript:void(0) " data-title="2" class="active">Title 02</a></li>
+            <li><a href="javascript:void(0) " data-title="3">Title 03</a></li>
+            <div class="sow-tab-content">TEST</div>
+        </ul>
+    </div>
+    <div class="sow-tab-contents">
+        <div class="sow-tab-content" data-content="1">Tab Content 01</div>
+        <div class="sow-tab-content" data-content="2">Tab Content 02</div>
+        <div class="sow-tab-content" data-content="3">Tab Content 03</div>
+    </div>
+</div>
+<hr>
+<div class="sow-tab-product-slider">
+    <div class="sow-tab-list">
+        <ul>
+            <li><a href="javascript:void(0) " data-title="1">Title 01</a></li>
+            <li><a href="javascript:void(0) " data-title="2">Title 02</a></li>
+            <li><a href="javascript:void(0) " data-title="3">Title 03</a></li>
+            <div class="sow-tab-content">TEST</div>
+        </ul>
+    </div>
+    <div class="sow-tab-contents">
+        <div class="sow-tab-content" data-content="1">Tab Content 01</div>
+        <div class="sow-tab-content" data-content="2">Tab Content 02</div>
+        <div class="sow-tab-content" data-content="3">Tab Content 03</div>
+    </div>
+</div>
 <script type="text/x-magento-init">
-{
-    ".sections.nav-sections": {
-        "mage/sticky": {
-	           "container" : ".page-wrapper",
-	           "spacingTop" : -130
-    	}
+    {
+        ".sow-tab-product-slider": {
+            "easytab": {}
+        }
     }
-}
 </script>

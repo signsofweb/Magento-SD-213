@@ -1,0 +1,33 @@
+<?php
+$options = $block->getAllOptions();
+$tab_list = $block->renderTablist();
+$tab_content = $block->renderDataList();
+?>
+<div class="sow-tab-product-slider">
+    <?php if (isset($options['widget_title'])): ?>
+        <div class="sow-title">
+            <h3><?php /* @escapeNotVerified */ echo $options['widget_title']; ?></h3>
+            <?php if (isset($options['widget_description'])): ?>
+                <p><?php /* @escapeNotVerified */ echo $options['widget_description']; ?></p>
+            <?php endif ?>
+        </div>
+        <?php if(count($tab_list) >0):?>
+        <div class="sow-tab-list">
+            <ul>
+                <?php foreach ($tab_list as $tab):?>
+                    <li><a href="javascript:void(0) " data-title="<?= $tab['tab_id'] ?>"><?= $tab['title'] ?></a></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php endif ?>
+        <?php if(count($tab_content)): ?>
+            <div class="sow-tab-contents">
+                <?php foreach ($tab_content as $ct):?>
+                    <div class="sow-tab-content" data-content="<?= $ct['tab_id'] ?>">
+                        <?= $block->getProductSlider($ct['data']);?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif;?>
+    <?php endif ?>
+</div>

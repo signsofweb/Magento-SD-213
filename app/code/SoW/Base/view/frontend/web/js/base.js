@@ -7,62 +7,64 @@ require([
 ], function ($) {
     'use strict';
 
-    $('.sow_owlcarousel .owl-carousel').each(function () {
-        var options = {
-            item_md: 1,
-            item_sm: 1,
-            item_xs: 1,
-            dots: 1,
-            nav: 1,
-            loop: 1,
-            autoplayHoverPause: 1,
-            autoplaySpeed: 3000,
-            autoplay: 1
-        };
+   $(document).ready(function () {
+       $('.sow-owlcarousel .owl-carousel').each(function () {
+           var options = {
+               item_md: 1,
+               item_sm: 1,
+               item_xs: 1,
+               dots: 1,
+               nav: 1,
+               loop: 1,
+               autoplayHoverPause: 1,
+               autoplaySpeed: 3000,
+               autoplay: 1
+           };
 
-        var new_options = JSON.parse($(this).attr('data-slider'));
-        $.each(new_options,function(i,option) {
-            if(option != null){
-               options[i] = new_options[i];
-            }
-        })
-        $(this).owlCarousel({
-            animateIn: 'fadeOutRight',
-            animateOut: 'fadeInLeft',
-            autoplay: options.autoplay,
-            autoplaySpeed: options.autoplaySpeed,
-            autoplayHoverPause: options.autoplayHoverPause,
-            loop: options.loop,
-            touchDrag: false,
-            nav: options.nav,
-            dots: options.dots,
-            navText: ['<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>'],
-            responsive: {
-                0:{
-                    items: 1,
-                },
-                320:{
-                    items: 1,
-                },
-                480: {
-                    items: options.item_xs,
+           var new_options = JSON.parse($(this).attr('data-slider'));
+           $.each(new_options,function(i,option) {
+               if(option != null){
+                   options[i] = new_options[i];
+               }
+           })
+           $(this).owlCarousel({
+               animateIn: 'fadeOutRight',
+               animateOut: 'fadeInLeft',
+               autoplay: options.autoplay,
+               autoplaySpeed: options.autoplaySpeed,
+               autoplayHoverPause: options.autoplayHoverPause,
+               loop: options.loop,
+               touchDrag: false,
+               nav: options.nav,
+               dots: options.dots,
+               navText: ['<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>'],
+               responsive: {
+                   0:{
+                       items: 1,
+                   },
+                   320:{
+                       items: 1,
+                   },
+                   480: {
+                       items: options.item_xs,
 
-                },
-                768: {
-                    items: options.item_sm,
+                   },
+                   768: {
+                       items: options.item_sm,
 
-                },
-                992: {
-                    items: options.item_md,
+                   },
+                   992: {
+                       items: options.item_md,
 
-                },
-                1200: {
-                    items: options.item_md,
+                   },
+                   1200: {
+                       items: options.item_md,
 
-                }
-            }
-        });
-    });
+                   }
+               }
+           });
+       });
+   });
 
 })
 /*

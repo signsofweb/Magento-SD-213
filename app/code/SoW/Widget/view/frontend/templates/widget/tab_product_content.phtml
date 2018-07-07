@@ -1,0 +1,115 @@
+<?php
+use Magento\Framework\App\Action\Action;
+
+$items = $block->getProductCollection()->getItems();
+?>
+<?php if (count($items) > 0): ?>
+    <?php
+    $image = 'new_products_content_widget_list';
+
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    ?>
+    <div class="sow-owlcarousel">
+        <div class="sow-content">
+            <div class="sow-items owl-carousel" data-slider='<?php echo $block->getDataSlider() ?>'>
+                <?php foreach ($items as $_item): ?>
+                    <div class="sow-item">
+                        <div class="sow-item-photo">
+                            <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>">
+                                <?php echo $block->getImage($_item, $image)->toHtml(); ?>
+                            </a>
+                            <!-- New Label -->
+                            <?php
+                            $isNew = $this->checkProductIsNew($_item);
+                            ?>
+                            <?php if($isNew):?>
+                                <div class="sow-label new-label"><?php echo __('new'); ?></div>
+                            <?php endif; ?>
+                            <!--  Sale Label -->
+                            <?php
+                            $isSale = $this->checkProductIsSale($_item);
+                            ?>
+                            <?php if($isSale):?>
+                                <div class="sow-label sale-label"><?php echo __('sale'); ?></div>
+                            <?php endif; ?>
+                            <!-- Show count down -->
+                            <?php
+                            $countDown = $this->checkCountDownTimer($_item);
+                            ?>
+                            <?php if($countDown['isCountDown']):?>
+                                <div class="count-down" data-time="<?php echo $countDown['time']?>"></div>
+                            <?php endif ?>
+                        </div>
+                        <div class="sow-item-details">
+                            <div class="sow-item-name">
+                                <a title="<?php echo $block->escapeHtml($_item->getName()) ?>"
+                                   href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($_item) ?>">
+                                    <?php echo $block->escapeHtml($_item->getName()) ?>
+                                </a>
+                            </div>
+                            <?php echo $block->getProductPriceHtml($_item) ?>
+                            <?php
+                            echo $block->getReviewsSummaryHtml($_item)
+                            ?>
+
+                            <div class="sow-item-actions">
+                                <!--  Add to cart -->
+                                <?php if ($_item->isSaleable()): ?>
+                                    <?php $postParams = $block->getAddToCartPostParams($_item); ?>
+
+                                    <form data-role="tocart-form"  data-product-sku="<?php echo $block->escapeHtml($_item->getSku()); ?>"
+                                          action="<?php echo $block->escapeHtml($postParams['action']); ?>" method="post">
+                                        <input type="hidden" name="product" value="<?php /* @escapeNotVerified */ echo $postParams['data']['product']; ?>">
+                                        <input type="hidden" name="<?php /* @escapeNotVerified */ echo Action::PARAM_NAME_URL_ENCODED; ?>" value="<?php /* @escapeNotVerified */ echo $postParams['data'][Action::PARAM_NAME_URL_ENCODED]; ?>">
+                                        <?php echo $block->getBlockHtml('formkey')?>
+                                        <button type="submit"
+                                                title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
+                                                class="action tocart primary">
+                                            <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <?php if ($_item->getIsSalable()): ?>
+                                        <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
+                                    <?php else: ?>
+                                        <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                <!-- Add to wishlist -->
+                                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
+                                    <a href="#"
+                                       data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($_item); ?>'
+                                       class="action towishlist" data-action="add-to-wishlist"
+                                       title="<?php /* @escapeNotVerified */ echo __('Add to Wish List') ?>">
+                                        <span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span>
+                                    </a>
+                                <?php endif; ?>
+                                <!-- Add To compare-->
+                                <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
+                                <a href="#" class="action tocompare"
+                                   data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_item); ?>'
+                                   title="<?php /* @escapeNotVerified */ echo __('Add to Compare') ?>">
+                                    <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
+                                </a>
+                                <!--Quick view-->
+                                <a href="javascript:void(0)" class="action quickview"><i class="fa fa-eye"></i><?php /* @escapeNotVerified */ echo __('Quick view') ?></a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form]": {
+                "catalogAddToCart": {
+                }
+            }
+        }
+        </script>
+<?php endif; ?>

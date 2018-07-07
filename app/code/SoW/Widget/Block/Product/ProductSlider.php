@@ -46,16 +46,22 @@ class ProductSlider extends AbstractProduct{
     public function getRow(){
         return ($this->getOptions('row'))? $this->getOptions('row') : 1;
     }
+
     /**
      * {@inheritdoc}
      */
     protected function _beforeToHtml()
     {
-        if($this->getOptions('is_vertical') != 1){
-            $this->setTemplate('widget/productslider.phtml');
-        }else{
-            $this->setTemplate('widget/vertical_productslider.phtml');
-        }
+            if($this->getData('is_tab')){
+                $this->setTemplate('widget/tab_product_content.phtml');
+            }else{
+                if($this->getOptions('is_vertical') != 1){
+                    $this->setTemplate('widget/productslider.phtml');
+                }else{
+                    $this->setTemplate('widget/vertical_productslider.phtml');
+                }
+            }
+
         return parent::_beforeToHtml();
     }
 }
