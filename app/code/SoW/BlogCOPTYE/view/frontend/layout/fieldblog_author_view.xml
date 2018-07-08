@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Fieldthemes
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Fieldthemes.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.fieldthemes.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Fieldthemes
+ * @package    Field_Blog
+ * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
+ * @license    http://www.fieldthemes.com/LICENSE-1.0.html
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<referenceBlock name="head.additional">
+			<block class="Field\Blog\Block\Author\Rss\Link" name="rss.head.link" template="Field_Blog::rss/head.phtml"/>
+		</referenceBlock>
+		<referenceContainer name="sidebar.main">
+			<block class="Magento\Framework\View\Element\Template" name="blog.searchform.main" template="Field_Blog::search/form.phtml" before="-"/>
+			<block class="Field\Blog\Block\Post\RecentPosts" name="blog.recents.post" template="Field_Blog::post/recensposts.phtml" after="blog.searchform">
+				<arguments>
+					<argument name="show_title" xsi:type="boolean">true</argument>
+				</arguments>
+			</block>
+			<block class="Field\Blog\Block\Category\CategoryList" name="blog.category.list.main" template="Field_Blog::category/list.phtml" after="blog.recents.post"/>
+			<block class="Field\Blog\Block\Comment\RecentComments" name="blog.recents.comment.main" template="Field_Blog::comment/recentcomments.phtml" after="blog.category.list">
+				<arguments>
+					<argument name="show_title" xsi:type="boolean">true</argument>
+				</arguments>
+			</block>
+			<block class="Field\Blog\Block\Tag\TagList" name="blog.tag.list.main" template="Field_Blog::tag/list.phtml" after="blog.recents.comment"/>
+		</referenceContainer>
+		<referenceContainer name="content">
+			<block class="Field\Blog\Block\Author\View" name="blog.author.posts" template="Field_Blog::author/posts.phtml">
+				<block class="Field\Blog\Block\Post\ListPost" name="blog.posts.list" as="post_list" template="Field_Blog::post/list.phtml">
+					<!-- <arguments>
+						<argument name="layout_type" xsi:type="string">grid</argument>
+						<argument name="item_per_page" xsi:type="string">6</argument>
+						<argument name="show_title" xsi:type="boolean">false</argument>
+					</arguments> -->
+				</block>
+				<block class="Field\Blog\Block\Toolbar" name="fieldblog_toolbar" template="Field_Blog::toolbar.phtml">
+					<block class="Magento\Theme\Block\Html\Pager" name="blog_list_toolbar_pager"/>
+				</block>
+			</block>
+		</referenceContainer>
+		<referenceBlock name="page.main.title">
+            <block class="Field\Blog\Block\Author\Rss\Link" name="rss.link" template="Field_Blog::rss/rss.phtml"/>
+        </referenceBlock>
+	</body>
+</page>

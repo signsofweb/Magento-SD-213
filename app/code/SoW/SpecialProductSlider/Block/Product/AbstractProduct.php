@@ -1,6 +1,6 @@
 <?php
 
-namespace SoW\Base\Block\Products;
+namespace SoW\SpecialProductSlider\Block\Product;
 
 /**
  * Catalog Products List widget block

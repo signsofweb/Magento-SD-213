@@ -1,6 +1,6 @@
 <?php
 namespace SoW\SpecialProductSlider\Block;
-use SoW\Base\Block\Products\AbstractProduct;
+use SoW\SpecialProductSlider\Block\Product\AbstractProduct;
 use SoW\SpecialProductSlider\Model\Config;
 
 class SpecialProductSlider extends AbstractProduct{
