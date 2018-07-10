@@ -9,7 +9,7 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="productslider" class="SoW\Widget\Block\Product\ProductSlider">
         <label translate="true">SoW Product Slider</label>
-        <description></description>
+        <description translate="true">List of Products</description>
         <parameters>
             <parameter name="general_settings_heading" xsi:type="conditions" visible="true" sort_order="0" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
                 <label translate="true">General Settings</label>
@@ -38,23 +38,23 @@
             </parameter>
             <parameter name="max_item" xsi:type="text" visible="true" sort_order="60">
                 <label translate="true">Max Item</label>
-                <value>5</value>
                 <description><![CDATA[The column is showing on desstop screen.]]></description>
+                <value>5</value>
             </parameter>
             <parameter name="medium_item" xsi:type="text" visible="true" sort_order="70">
                 <label translate="true">Medium item</label>
-                <value>3</value>
                 <description><![CDATA[The column is showing on tablet.]]></description>
+                <value>3</value>
             </parameter>
             <parameter name="min_item" xsi:type="text" visible="true" sort_order="80">
                 <label translate="true">Min item</label>
-                <value>1</value>
                 <description><![CDATA[The column is showing on mobile.]]></description>
+                <value>1</value>
             </parameter>
             <parameter name="row" xsi:type="text" visible="true" sort_order="90">
                 <label translate="true">Row</label>
-                <value>1</value>
                 <description><![CDATA[The row is showing.]]></description>
+                <value>1</value>
             </parameter>
             <parameter name="show_dots" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="100">
                 <label translate="true">Show Dots</label>
@@ -76,8 +76,8 @@
         </parameters>
     </widget>
     <widget id="tabproductslider" class="SoW\Widget\Block\Product\TabProductSlider">
-    <label translate="true">SoW Tab Product Slider</label>
-    <description></description>
+        <label translate="true">SoW Tab Product Slider</label>
+        <description></description>
         <parameters>
             <parameter name="general_settings_heading" xsi:type="conditions" visible="true" sort_order="0" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
                 <label translate="true">General Settings</label>
@@ -178,12 +178,12 @@
                 </depends>
             </parameter>
             <parameter name="enable_tab_5" xsi:type="select" visible="true" sort_order="73" source_model="Magento\Config\Model\Config\Source\Yesno">
-            <label translate="true">Enable Tab 5</label>
-            <depends>
-                <parameter name="enable_tab_2" value="1" />
-                <parameter name="enable_tab_3" value="1" />
-                <parameter name="enable_tab_4" value="1" />
-            </depends>
+                <label translate="true">Enable Tab 5</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                </depends>
             </parameter>
             <!--Tab 5-->
             <parameter name="tab_5_title" xsi:type="text" visible="true" sort_order="80">
@@ -214,13 +214,13 @@
                 </depends>
             </parameter>
             <parameter name="enable_tab_6" xsi:type="select" visible="true" sort_order="83" source_model="Magento\Config\Model\Config\Source\Yesno">
-            <label translate="true">Enable Tab 6</label>
-            <depends>
-                <parameter name="enable_tab_2" value="1" />
-                <parameter name="enable_tab_3" value="1" />
-                <parameter name="enable_tab_4" value="1" />
-                <parameter name="enable_tab_5" value="1" />
-            </depends>
+                <label translate="true">Enable Tab 6</label>
+                <depends>
+                    <parameter name="enable_tab_2" value="1" />
+                    <parameter name="enable_tab_3" value="1" />
+                    <parameter name="enable_tab_4" value="1" />
+                    <parameter name="enable_tab_5" value="1" />
+                </depends>
             </parameter>
             <!--Tab 6-->
             <parameter name="tab_6_title" xsi:type="text" visible="true" sort_order="60">
@@ -266,23 +266,23 @@
             </parameter>
             <parameter name="max_item" xsi:type="text" visible="true" sort_order="260">
                 <label translate="true">Max Item</label>
-                <value>5</value>
                 <description><![CDATA[The column is showing on desstop screen.]]></description>
+                <value>5</value>
             </parameter>
             <parameter name="medium_item" xsi:type="text" visible="true" sort_order="270">
                 <label translate="true">Medium item</label>
-                <value>3</value>
                 <description><![CDATA[The column is showing on tablet.]]></description>
+                <value>3</value>
             </parameter>
             <parameter name="min_item" xsi:type="text" visible="true" sort_order="280">
                 <label translate="true">Min item</label>
-                <value>1</value>
                 <description><![CDATA[The column is showing on mobile.]]></description>
+                <value>1</value>
             </parameter>
             <parameter name="row" xsi:type="text" visible="true" sort_order="290">
                 <label translate="true">Row</label>
-                <value>1</value>
                 <description><![CDATA[The row is showing.]]></description>
+                <value>1</value>
             </parameter>
             <parameter name="show_dots" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="300">
                 <label translate="true">Show Dots</label>
@@ -304,4 +304,3 @@
         </parameters>
     </widget>
 </widgets>
-
