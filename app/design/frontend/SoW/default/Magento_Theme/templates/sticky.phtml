@@ -1,0 +1,27 @@
+<a href="javascript:void(0)" class="addtocompare">Add to Compare</a>
+<div class="content">
+    <span>Content:</span><div id="content"></div>
+    <div id="content2"></div>
+</div>
+
+<script type="text/javascript">
+    require(
+        ['jquery'],
+        function ($) {
+            $('.addtocompare').on('click',function () {
+                var data = {
+                    'id': 10,
+                    'name':5
+                }
+                $.ajax({
+                   url:'http://magento.build/ajaxproduct/product_compare/add',
+                    data: data,
+                    success: function (data) {
+                        $('#content').append(data);
+                    }
+                });
+                console.log('test');
+            })
+        }
+    );
+</script>
