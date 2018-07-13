@@ -39,11 +39,16 @@ define([
         },
         _addItem: function (item) {
             var $widget = this;
+            if(!this.compareProducts().items){
+                this.compareProducts().items = [];
+                this.compareProducts().count = 0;
+                this.compareProducts().countCaption = '0' + ' Item';
+            }
             this.compareProducts().items.push(item);
             this.compareProducts().count++;
             this.compareProducts().countCaption = this.compareProducts().count == 1 ? this.compareProducts().count + ' Item' : this.compareProducts().count + ' Items';
             this.compareProducts.valueHasMutated(); // HACK: Does not update view if called from within jQuery.on(), so this is needed for some reason.
-
+            console.log(this.compareProducts());
             var addData = JSON.parse(item.add_data);
             var formKey = $(this.options.formKeyInputSelector).val();
             if (formKey) {

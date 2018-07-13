@@ -52,6 +52,7 @@ class Data extends \Magento\Catalog\Helper\Product\Compare{
     public function getDataAction($id){
         $data = 'add';
         $ids = $this->getItemCollection()->getAllIds();
+        var_dump($ids);
         foreach ($ids as $item_id){
             if ($id == $item_id){
                 $data = 'remove';
