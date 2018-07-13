@@ -19,7 +19,7 @@ class ProductSlider extends AbstractProduct{
 
     public function getProductCollection(){
         $options = $this->getAllOptions();
-        return $this->_productModel->getProductCollectidon($options);
+        return $this->_productModel->getProductCollection($options);
     }
     public function getDataSlider(){
         $options = array(

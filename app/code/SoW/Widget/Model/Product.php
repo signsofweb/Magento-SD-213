@@ -208,7 +208,7 @@ class Product extends \Magento\Framework\DataObject{
 
         return $objectManager->create('\Magento\Framework\Stdlib\DateTime\DateTime')->date(null, '23:59:59');
     }
-    public function getProductCollectidon($options = [])
+    public function getProductCollection($options = [])
     {
         $collection = '';
         switch ($options['source']) {

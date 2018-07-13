@@ -10,10 +10,6 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
     {
         parent::__construct($context, $data);
     }
-    protected function _construct()
-    {
-        parent::_construct();
-    }
 
     public function getOptions($option, $default = '')
     {

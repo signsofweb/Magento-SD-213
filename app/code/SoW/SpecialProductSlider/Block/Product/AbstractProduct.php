@@ -113,7 +113,7 @@ class AbstractProduct extends \Magento\Catalog\Block\Product\AbstractProduct imp
 	{
 		parent::_construct();
 
-		$this->setData('cache_lifetime',86400);
+		$this->setData('cache_lifetime',false);
 		$this->addColumnCountLayoutDepend('empty', 6)
 			->addColumnCountLayoutDepend('1column', 5)
 			->addColumnCountLayoutDepend('2columns-left', 4)

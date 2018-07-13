@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Fieldthemes
+ * 
+ * NOTICE OF LICENSE
+ * 
+ * This source file is subject to the Fieldthemes.com license that is
+ * available through the world-wide-web at this URL:
+ * http://www.fieldthemes.com/license-agreement.html
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category   Fieldthemes
+ * @package    Field_Blog
+ * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
+ * @license    http://www.fieldthemes.com/LICENSE-1.0.html
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <container name="root" label="Root">
+        <block class="Field\Blog\Block\Adminhtml\Post\Edit\Tab\Related" name="blog.category.edit.tab.posts"/>
+    </container>
+</layout>

@@ -23,7 +23,7 @@ use Magento\Framework\App\Action\Action;
         $items = $block->getProductCollection()->getItems();
         $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
         ?>
-        <div id="special_product" class="sow_owlcarousel">
+        <div id="special-product" class="sow-owlcarousel">
             <?php if ($title): ?>
                 <div class="sow-title">
                     <h3><?php /* @escapeNotVerified */ echo $title; ?></h3>
@@ -107,10 +107,13 @@ use Magento\Framework\App\Action\Action;
                                         </a>
                                     <?php endif; ?>
                                     <!-- Add To compare-->
-                                    <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
-                                    <a href="#" class="action tocompare"
-                                       data-post='<?php /* @escapeNotVerified */ echo $compareHelper->getPostDataParams($_item); ?>'
-                                       title="<?php /* @escapeNotVerified */ echo __('Add to Compare') ?>">
+                                    <?php $compareHelper = $this->helper('SoW\AjaxPattern\Helper\Data'); ?>
+                                    <a class="action compare "
+                                       title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+                                       aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
+                                       data-compare='<?php /* @escapeNotVerified */ echo $compareHelper->getCompareData($_item); ?>'
+                                       data-action="<?= $compareHelper->getDataAction($_item->getId())?>"
+                                       role="button">
                                         <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
                                     </a>
                                     <!--Quick view-->
