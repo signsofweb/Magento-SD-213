@@ -6,28 +6,28 @@ define([
 
     $.widget('mage.compare', {
         options: {
-            classes: {
-                addToCompareClass: 'tocompare'
-            },
             formKeyInputSelector: 'input[name="form_key"]'
         },
-
-        initialize: function () {
-            this._super();
+        _create: function(){
             this.compareProducts = customerData.get('compare-products');
 
-            this._setupChangeEvents();
         },
-
-        _setupChangeEvents: function () {
-
+        _init: function(){
+            this._Events();
+        },
+        _Events: function () {
             var $widget = this;
-
-            $('.' + this.options.classes.addToCompareClass).on('click', function () {
-                var element = $(this);
-                var found = $widget._itemExists(element.data('compare'));
-                if (!found) {
+            $widget.element.on('click', function () {
+                if($widget.element.attr('data-action') == 'add'){
                     $widget._addItem({
+                        'id': $(this).data('compare').id,
+                        'product_url': $(this).data('compare').product_url,
+                        'name': $(this).data('compare').name,
+                        'remove_data': $(this).data('compare').remove_data,
+                        'add_data': $(this).data('compare').add_data
+                    });
+                }else{
+                    $widget._removeItem({
                         'id': $(this).data('compare').id,
                         'product_url': $(this).data('compare').product_url,
                         'name': $(this).data('compare').name,
@@ -37,18 +37,8 @@ define([
                 }
             });
         },
-
-        _itemExists: function (compare) {
-            if (!this.compareProducts().items) return false;
-            var found = $.map(this.compareProducts().items, function (item) {
-                if (item.id == compare.id) {
-                    return item.id;
-                }
-            });
-            return !$.isEmptyObject(found);
-        },
-
         _addItem: function (item) {
+            var $widget = this;
             this.compareProducts().items.push(item);
             this.compareProducts().count++;
             this.compareProducts().countCaption = this.compareProducts().count == 1 ? this.compareProducts().count + ' Item' : this.compareProducts().count + ' Items';
@@ -64,7 +54,30 @@ define([
                 type: 'POST',
                 data: addData.data,
                 success: function (data, testStatus, jqXHR) {
-                    alert('Success');
+                    $widget.element.attr('data-action','remove');
+                    // TODO: Check for data.success === true to determine if it was an actual success.
+                    if (data.success == false) {
+                        alert('actually false');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('failure');
+                }
+            })
+        },
+        _removeItem: function (item) {
+            var $widget = this;
+            var removeData = JSON.parse(item.remove_data);
+            var formKey = $(this.options.formKeyInputSelector).val();
+            if (formKey) {
+                removeData.data.form_key = formKey;
+            }
+            $.ajax({
+                url: removeData.action,
+                type: 'POST',
+                data: removeData.data,
+                success: function (data, testStatus, jqXHR) {
+                    $widget.element.attr('data-action','add');
                     // TODO: Check for data.success === true to determine if it was an actual success.
                     if (data.success == false) {
                         alert('actually false');
