@@ -1,340 +1,170 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Block\Adminhtml\Post\Edit\Tab;
 
-class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+namespace SoW\Blog\Block\Adminhtml\Post\Edit\Tab;
+
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Data\FormFactory;
+use Magento\Cms\Model\Wysiwyg\Config;
+use SoW\Blog\Model\System\Config\Status;
+use SoW\Blog\Model\System\Config\Yesno;
+use SoW\Blog\Model\System\Config\VideoType;
+use SoW\Blog\Model\System\Config\ImageType;
+use SoW\Blog\Model\Source\Category;
+
+class Main extends Generic implements TabInterface
 {
-    /**
-     * @var \Magento\Store\Model\System\Store
-     */
+    protected $_wysiwygConfig;
+    protected $_status;
+    protected $_videoType;
+    protected $_imageType;
+    protected $_yesno;
     protected $_systemStore;
-
-    protected $_dateTime;
-
     protected $_category;
 
-    protected $_thumbnailType;
-    protected $_videoType;
-
-    protected $_user;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context
-     * @param \Magento\Framework\Registry
-     * @param \Magento\Framework\Data\FormFactory
-     * @param \Magento\Store\Model\System\Store
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime
-     * @param \Field\Blog\Model\Category
-     * @param \Field\Blog\Model\Config\Source\ThumbnailType
-     * @param \Field\Blog\Model\Config\Source\VideoType
-     * @param \Field\Blog\Model\Config\Source\User
-     * @param array
-     */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Config $wysiwygConfig,
+        Status $status,
+        VideoType $videoType,
+        ImageType $imageType,
+        Yesno $yesno,
         \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Field\Blog\Model\Category $category,
-        \Field\Blog\Model\Config\Source\ThumbnailType $thumbnailType,
-        \Field\Blog\Model\Config\Source\VideoType $videoType,
-        \Field\Blog\Model\Config\Source\User $user,
+        Category $category,
         array $data = []
-    ) {
+    )
+    {
+        $this->_wysiwygConfig = $wysiwygConfig;
+        $this->_status = $status;
+        $this->_yesno = $yesno;
         $this->_systemStore = $systemStore;
-        $this->_dateTime = $dateTime;
-        $this->_category = $category;
-        $this->_thumbnailType = $thumbnailType;
         $this->_videoType = $videoType;
-        $this->_user = $user;
+        $this->_imageType = $imageType;
+        $this->_category = $category;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
-    /**
-     * Prepare form
-     *
-     * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
+    public function getTabLabel()
+    {
+        return __('General');
+    }
+
+    public function getTabTitle()
+    {
+        return __('General');
+    }
+
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    public function isHidden()
+    {
+        return false;
+    }
+
     protected function _prepareForm()
     {
-        /* @var $model \Magento\Cms\Model\Page */
         $model = $this->_coreRegistry->registry('current_post');
-
-        /*
-         * Checking if user have permissions to save information
-         */
-        if ($this->_isAllowedAction('Field_Blog::post_save')) {
-            $isElementDisabled = false;
-        } else {
-            $isElementDisabled = true;
-        }
-
-        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
-
-        $form->setHtmlIdPrefix('post_');
-
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Post Information')]);
-
+        $form->setHtmlIdPrefix('post_general_');
+        $fieldset = $form->addFieldset('general_fieldset', ['legend' => __('General')]);
         if ($model->getId()) {
             $fieldset->addField('post_id', 'hidden', ['name' => 'post_id']);
+            $fieldset->addField('created_at', 'hidden', ['name' => 'post[created_at]']);
+            $fieldset->addField('user', 'hidden', ['name' => 'post[user]']);
         }
-
         $fieldset->addField(
             'title',
             'text',
-            [
-                'name' => 'title',
-                'label' => __('Post Title'),
-                'title' => __('Post Title'),
-                'required' => true,
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'post[title]', 'label' => __('Title'), 'title' => __('Title'), 'required' => true]
         );
-
         $fieldset->addField(
-            'identifier',
+            'url_key',
             'text',
-            [
-                'name' => 'identifier',
-                'label' => __('Identifier'),
-                'title' => __('Identifier'),
-                'class' => 'validate-identifier',
-                'required' => true,
-                'note' => __('Relative to Web Site Base URL'),
-                'disabled' => $isElementDisabled
-            ]
-        ); 
-
+            ['name' => 'post[url_key]', 'label' => __('URL Key'), 'title' => __('URL Key'), 'required' => false, 'class' => 'validate-identifier']
+        );
         $fieldset->addField(
-            'image_type',
-            'select',
+            'categories',
+            'multiselect',
             [
-                'label' => __('Image Types'),
-                'title' => __('Image Types'),
-                'name' => 'image_type',
-                'options' => $this->_thumbnailType->toOptionArray(),
-                'disabled' => $isElementDisabled,
-                'note' => 'Shown on post page',
-                'after_element_html' => '
-                    <script>
-                        require(["jquery"], function($){
-                            $( document ).ready(function() {
-                                $("#post_image_type").on("change", function(){
-                                    var val = $(this).val();
-                                    if(val == "1"){
-                                        $("#post_image").parents(".admin__field").show();
-                                        $("#post_image_video_type").parents(".admin__field").hide();
-                                        $("#post_image_video_id").parents(".admin__field").hide();
-                                    }else{
-                                        $("#post_image").parents(".admin__field").hide();
-                                        $("#post_image_video_type").parents(".admin__field").show();
-                                        $("#post_image_video_id").parents(".admin__field").show();
-                                    }
-                                }).change();
-                            });
-                        });
-                    </script>
-                '
+                'name' => 'categories[]',
+                'label' => __('Categories'),
+                'title' => __('Categories'),
+                'required' => false,
+                'style' => 'width: 30em;',
+                'values' => $this->_category->toOptionArray(),
             ]
         );
-
         $fieldset->addField(
-            'image_video_type',
+            'thumb_type',
             'select',
-            [
-                'label' => __('Video Types'),
-                'title' => __('Video Types'),
-                'name' => 'image_video_type',
-                'options' => $this->_videoType->toOptionArray(),
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'post[thumb_type]', 'label' => __('Thumbnail Type'), 'note' => __('Show on Widget, Sidebar, List Post'), 'title' => __('Thumbnail Type'), 'options' => $this->_imageType->toOptionArray()]
         );
-
         $fieldset->addField(
-            'image_video_id',
+            'video_thumb_type',
+            'select',
+            ['name' => 'post[video_thumb_type]', 'label' => __('Video Thumbnail Type'), 'title' => __('Video Thumbnail Type'), 'options' => $this->_videoType->toOptionArray()]
+        );
+        $fieldset->addField(
+            'video_thumb_id',
             'text',
-            [
-                'name' => 'image_video_id',
-                'label' => __('Video ID'),
-                'title' => __('Video ID'),
-                'after_element_html' => 'For Examples:<br/> 1. Youtube<br/> Link: https://www.youtube.com/watch?v=BBvsB5PcitQ<br/> VideoID: <strong>BBvsB5PcitQ</strong><br/>2. Vimeo<br/> Link: https://vimeo.com/145947876<br/> VideoID: <strong>145947876</strong>'
-            ]
-            );
-
-        $fieldset->addField(
-            'image',
-            'image',
-            [
-                'name' => 'image',
-                'label' => __('Image'),
-                'title' => __('Image'),
-                'disabled' => $isElementDisabled
-            ]
-            );
-
-        $fieldset->addField(
-            'thumbnail_type',
-            'select',
-            [
-                'label' => __('Thumbnail Types'),
-                'title' => __('Thumbnail Types'),
-                'name' => 'thumbnail_type',
-                'options' => $this->_thumbnailType->toOptionArray(),
-                'disabled' => $isElementDisabled,
-                'note' => 'Shown on post page',
-                'after_element_html' => '
-                    <script>
-                        require(["jquery"], function($){
-                            $( document ).ready(function() {
-                                $("#post_thumbnail_type").on("change", function(){
-                                    var val = $(this).val();
-                                    if(val == "1"){
-                                        $("#post_thumbnail").parents(".admin__field").show();
-                                        $("#post_thumbnail_video_type").parents(".admin__field").hide();
-                                        $("#post_thumbnail_video_id").parents(".admin__field").hide();
-                                    }else{
-                                        $("#post_thumbnail").parents(".admin__field").hide();
-                                        $("#post_thumbnail_video_type").parents(".admin__field").show();
-                                        $("#post_thumbnail_video_id").parents(".admin__field").show();
-                                    }
-                                }).change();
-                            });
-                        });
-                    </script>
-                '
-            ]
+            ['name' => 'post[video_thumb_id]', 'label' => __('Video Thumbnail Id'), 'note' => __('For Examples:<br>1. Youtube<br>Link: https://www.youtube.com/watch?v=BBvsB5PcitQ<br>VideoID:<strong>BBvsB5PcitQ</strong><br>2. Vimeo<br>Link: https://vimeo.com/145947876<br>VideoID:<strong>145947876</strong>'), 'title' => __('Video Thumbnail Id'), 'required' => false]
         );
-
-        $fieldset->addField(
-            'thumbnail_video_type',
-            'select',
-            [
-                'label' => __('Video Types'),
-                'title' => __('Video Types'),
-                'name' => 'thumbnail_video_type',
-                'options' => $this->_videoType->toOptionArray(),
-                'disabled' => $isElementDisabled
-            ]
-        );
-
-        $fieldset->addField(
-            'thumbnail_video_id',
-            'text',
-            [
-                'name' => 'thumbnail_video_id',
-                'label' => __('Video ID'),
-                'title' => __('Video ID'),
-                'after_element_html' => 'For Examples:<br/> 1. Youtube<br/> Link: https://www.youtube.com/watch?v=BBvsB5PcitQ<br/> VideoID: <strong>BBvsB5PcitQ</strong><br/>2. Vimeo<br/> Link: https://vimeo.com/145947876<br/> VideoID: <strong>145947876</strong>'
-            ]
-            );
-
         $fieldset->addField(
             'thumbnail',
             'image',
-            [
-                'name' => 'thumbnail',
-                'label' => __('Image'),
-                'title' => __('Image'),
-                'disabled' => $isElementDisabled
-            ]
-            );
-
-        $field = $fieldset->addField(
-                'categories',
-                'multiselect',
-                [
-                    'name' => 'categories[]',
-                    'label' => __('Category'),
-                    'title' => __('Category'),
-                    'values' => $this->_category->getCollection()->toOptionArray(),
-                    'disabled' => $isElementDisabled,
-                    'style' => 'width: 200px;'
-                ]
-            );
-
-        $fieldset->addField(
-            'tags',
-            'text',
-            [
-                'name' => 'tags',
-                'label' => __('Tags'),
-                'title' => __('Tags'),
-                'note' => __('Comma-separated.'),
-                'disabled' => $isElementDisabled
-            ]
-        );
-
-        $fieldset->addField(
-            'hits',
-            'text',
-            [
-                'name' => 'hits',
-                'label' => __('Hits'),
-                'title' => __('Hits'),
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'thumbnail', 'label' => __('Thumbnail'), 'title' => __('Thumbnail'), 'required' => false]
         );
         $fieldset->addField(
-            'user_id',
+            'image_type',
             'select',
-            [
-                'label' => __('Author'),
-                'title' => __('Author'),
-                'name' => 'user_id',
-                'options' => $this->_user->toOptionArray(),
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'post[image_type]', 'label' => __('Image Type'), 'note' => __('Show on Post Detail'), 'title' => __('Image Type'), 'options' => $this->_imageType->toOptionArray()]
         );
-
-        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
-        $fieldset->addField( 'creation_time', 
-            'date', 
-            [ 
-                'label' => __('Creation Time'),
-                'title' => __('Creation Time'),
-                'name' => 'creation_time',
-                'date_format' => $dateFormat
-            ]
-        );
-
         $fieldset->addField(
-            'enable_comment',
+            'video_big_type',
             'select',
+            ['name' => 'post[video_big_type]', 'label' => __('Video Big Type'), 'title' => __('Video Big Type'), 'options' => $this->_videoType->toOptionArray()]
+        );
+        $fieldset->addField(
+            'video_big_id',
+            'text',
+            ['name' => 'post[video_big_id]', 'label' => __('Video Big Id'), 'note' => __('For Examples:<br>1. Youtube<br>Link: https://www.youtube.com/watch?v=BBvsB5PcitQ<br>VideoID:<strong>BBvsB5PcitQ</strong><br>2. Vimeo<br>Link: https://vimeo.com/145947876<br>VideoID:<strong>145947876</strong>'), 'title' => __('Video Big Id'), 'required' => false]
+        );
+        $fieldset->addField(
+            'image',
+            'image',
+            ['name' => 'image', 'label' => __('Image'), 'title' => __('Image'), 'required' => false]
+        );
+        $wysiwygConfig = $this->_wysiwygConfig->getConfig();
+        $fieldset->addField(
+            'short_content',
+            'editor',
+            ['name' => 'post[short_content]', 'label' => __('Short Content'), 'title' => __('Short Content'), 'required' => false, 'config' => $wysiwygConfig]
+        );
+        $fieldset->addField(
+            'content',
+            'editor',
+            ['name' => 'post[content]', 'label' => __('Content'), 'title' => __('Content'), 'required' => true, 'config' => $wysiwygConfig]
+        );
+        
+		$fieldset->addType('custommultipletype', '\SoW\Blog\Block\Adminhtml\Multiple\Images');
+		$fieldset->addField(
+            'gallery_image',
+            'custommultipletype',
             [
-                'label'    => __('Enable Comments'),
-                'title'    => __('Enable Comments'),
-                'name'     => 'enable_comment',
-                'note'     => __('Disabling will close the post to new comments'),
-                'options'  => $model->getAvailableStatuses(),
-                'disabled' => $isElementDisabled
+                'label' => __('Gallery Image'),
+                'name' => 'gallery_image',
+				'type' => 'hidden',
+                'required' => false
             ]
         );
-
-
-        /**
-         * Check is single store mode
-         */
+        
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
                 'store_id',
@@ -344,8 +174,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                     'label' => __('Store View'),
                     'title' => __('Store View'),
                     'required' => true,
-                    'values' => $this->_systemStore->getStoreValuesForForm(false, true),
-                    'disabled' => $isElementDisabled
+                    'values' => $this->_systemStore->getStoreValuesForForm(false, true)
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
@@ -360,81 +189,18 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             );
             $model->setStoreId($this->_storeManager->getStore(true)->getId());
         }
-
         $fieldset->addField(
-            'is_active',
-            'select',
-            [
-                'label' => __('Post Status'),
-                'title' => __('Post Status'),
-                'name' => 'is_active',
-                'options' => $model->getAvailableStatuses(),
-                'disabled' => $isElementDisabled
-            ]
+            'tags',
+            'textarea',
+            ['name' => 'post[tags]', 'label' => __('Tags'), 'title' => __('Tags'), 'required' => false]
         );
-        if (!$model->getId()) {
-            $model->setData('is_active', $isElementDisabled ? '0' : '1');
-        }
-
-        $this->_eventManager->dispatch('adminhtml_blog_post_edit_tab_main_prepare_form', ['form' => $form]);
-        $data = $model->getData();
-        if(!isset($data['creation_time']) || (isset($data['creation_time']) && $data['creation_time'] == '')){
-            //$data['creation_time'] = $this->_dateTime->gmtDate();
-        }
-        if(!isset($data['hits'])){
-            $data['hits'] = 0;
-            $data['enable_comment'] = 1;
-        }
-        $form->setValues($data);
+        $fieldset->addField(
+            'status',
+            'select',
+            ['name' => 'post[status]', 'label' => __('Status'), 'title' => __('Status'), 'options' => $this->_status->toOptionArray()]
+        );
+        $form->setValues($model->getData());
         $this->setForm($form);
-
         return parent::_prepareForm();
-    }
-
-    /**
-     * Prepare label for tab
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getTabLabel()
-    {
-        return __('Post Information');
-    }
-
-    /**
-     * Prepare title for tab
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getTabTitle()
-    {
-        return __('Post Information');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isHidden()
-    {
-        return false;
-    }
-
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
     }
 }

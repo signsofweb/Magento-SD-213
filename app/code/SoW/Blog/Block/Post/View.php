@@ -1,196 +1,252 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Block\Post;
+
+namespace SoW\Blog\Block\Post;
+
+use Magento\Customer\Model\Context as CustomerContext;
+use Magento\Framework\App\RequestInterface;
 
 class View extends \Magento\Framework\View\Element\Template
 {
-
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
     protected $_coreRegistry = null;
-
-    /**
-     * @var \Magento\Catalog\Helper\Category
-     */
     protected $_blogHelper;
+    protected $_post;
+    protected $_category;
+    protected $httpContext;
+    protected $request;
 
-    /**
-     * @var \Field\Blog\Model\Post
-     */
-    protected $_postFactory;
-    protected $_cattegoryFactory;
-    protected $_collection;
-    protected $_postsBlock;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context
-     * @param \Magento\Framework\Registry
-     * @param \Field\Blog\Model\Post
-     * @param \Field\Blog\Model\Category
-     * @param \Field\Blog\Helper\Data
-     * @param array
-     */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Field\Blog\Model\Post $postFactory,
-        \Field\Blog\Model\Category $categoryFactory,
-        \Field\Blog\Helper\Data $blogHelper,
+        \SoW\Blog\Helper\Data $blogHelper,
+        \SoW\Blog\Model\Post $post,
+        \SoW\Blog\Model\Category $category,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
-        ) {
-        $this->_blogHelper = $blogHelper;
+    )
+    {
+        $this->_post = $post;
+        $this->_category = $category;
         $this->_coreRegistry = $registry;
-        $this->_postFactory = $postFactory;
-        $this->_cattegoryFactory = $categoryFactory;
+        $this->request = $context->getRequest();
+        $this->_blogHelper = $blogHelper;
+        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
+    }
 
+    public function _construct()
+    {
+        if (!$this->getConfig('general_settings/enabled')) return;
+        parent::_construct();
+    }
+
+    public function getCacheKeyInfo()
+    {
+        return [
+            'BLOG_POST_VIEW',
+            $this->_storeManager->getStore()->getId(),
+            $this->_design->getDesignTheme()->getId(),
+            $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP),
+            'template' => $this->getTemplate()
+        ];
+    }
+
+    protected function _addBreadcrumbs()
+    {
+        $category = $this->getParentCategory();
+        $breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs');
+        $baseUrl = $this->_storeManager->getStore()->getBaseUrl();
+        $pageTitle = $this->_blogHelper->getConfig('general_settings/title');
+        $post = $this->getCurrentPost();
+        $breadcrumbsBlock->addCrumb(
+            'home',
+            [
+                'label' => __('Home'),
+                'title' => __('Go to Home Page'),
+                'link' => $baseUrl
+            ]
+        );
+        $breadcrumbsBlock->addCrumb(
+            'blog',
+            [
+                'label' => $pageTitle,
+                'title' => $pageTitle,
+                'link' => $this->_blogHelper->getRoute()
+            ]
+        );
+        if ($category != false) {
+            $breadcrumbsBlock->addCrumb(
+                'category',
+                [
+                    'label' => $category->getTitle(),
+                    'title' => $category->getTitle(),
+                    'link' => $category->getCategoryUrl()
+                ]
+            );
+        }
+        $breadcrumbsBlock->addCrumb(
+            'post',
+            [
+                'label' => $post->getTitle(),
+                'title' => $post->getTitle(),
+                'link' => ''
+            ]
+        );
     }
 
     public function getConfig($key, $default = '')
     {
-        if($this->hasData($key)){
-            return $this->getData($key);
-        }
         $result = $this->_blogHelper->getConfig($key);
-        $c = explode("/", $key);
-        if($this->hasData($c[1])){
-            return $this->getData($c[1]);
-        }
-        if($result == ""){
-            $this->setData($c[1], $default);
+        if (!$result) {
             return $default;
         }
-        $this->setData($c[1], $result);
         return $result;
     }
 
-    public function _toHtml(){
-        $post = $this->getPost();
-        if(!$this->getConfig('general_settings/enable') || !$post->getIsActive()) return;
-        return parent::_toHtml();
-    }
-
-    /**
-     * Prepare breadcrumbs
-     *
-     * @param \Magento\Cms\Model\Page $brand
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
-     */
-    protected function _addBreadcrumbs()
+    public function getCurrentPost()
     {
-        $breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs');
-        $baseUrl = $this->_storeManager->getStore()->getBaseUrl();
-        $post = $this->getPost();
-        $page_title = $post->getPageTitle();
-        $show_breadcrumbs = $this->getConfig('post_page/show_breadcrumbs');
-        $categoriesUrls = $this->getConfig('general_settings/categories_urls');
-        if($show_breadcrumbs && $breadcrumbsBlock){
-            $breadcrumbsBlock->addCrumb(
-                'home',
-                [
-                    'label' => __('Home'),
-                    'title' => __('Go to Home Page'),
-                    'link'  => $baseUrl
-                ]
-                );
-
-            $breadcrumbsBlock->addCrumb(
-                'latest',
-                [
-                    'label' => __('Blog'),
-                    'title' => __('Return to Blog'),
-                    'link'  => $this->_blogHelper->getLatestPageUrl()
-                ]
-                );
-
-            $categories = $post->getPostCategories();
-            if($categories && isset($categories[0]['identifier']) && $categories[0]['identifier']!=''){
-                $categoryUrl = $categories[0]['identifier'] . '/';
-                $breadcrumbsBlock->addCrumb(
-                'category',
-                [
-                    'label' => $categories[0]['name'],
-                    'title' => $categories[0]['name'],
-                    'link'  => $this->_blogHelper->getCategoryUrl($categories[0]['identifier'])
-                ]
-                );
-            }
-
-            $breadcrumbsBlock->addCrumb(
-                'fieldblog',
-                [
-                    'label' => $page_title,
-                    'title' => $page_title,
-                    'link'  => ''
-                ]
-                );
+        $post = $this->_coreRegistry->registry('current_post');
+        if ($post) {
+            $this->setData('current_post', $post);
         }
+        return $post;
     }
 
-    /**
-     * Set brand collection
-     * @param \Field\Blog\Model\Post
-     */
-    public function setCollection($collection)
-    {
-        $this->_collection = $collection;
-        return $this->_collection;
-    }
-
-    public function getCollection(){
-        return $this->_collection;
-    }
-
-    /**
-     * Prepare global layout
-     *
-     * @return $this
-     */
     protected function _prepareLayout()
-    {   
-        $post = $this->getPost();
-        $page_title = $post->getPageTitle();
-        $meta_description = $post->getMetaDescription();
-        $meta_keywords = $post->getMetaKeywords();
-
+    {
+        $post = $this->getCurrentPost();
+        $pageTitle = $post->getTitle();
+        $metaKeywords = $post->getMetaKeywords();
+        $metaDescription = $post->getMetaDescription();
         $this->_addBreadcrumbs();
-        $this->pageConfig->addBodyClass('blog-post-' . $post->getIdentifier());
-        if($page_title){
-            $this->pageConfig->getTitle()->set($page_title);   
+        $this->pageConfig->addBodyClass('blog-post-view');
+        if ($pageTitle) {
+            $this->pageConfig->getTitle()->set($pageTitle);
         }
-        if($meta_keywords){
-            $this->pageConfig->setKeywords($meta_keywords);   
+        if ($metaKeywords) {
+            $this->pageConfig->setKeywords($metaKeywords);
         }
-        if($meta_description){
-            $this->pageConfig->setDescription($meta_description);   
+        if ($metaDescription) {
+            $this->pageConfig->setDescription($metaDescription);
         }
         return parent::_prepareLayout();
     }
 
-    public function getPost(){
-        $post = $this->_coreRegistry->registry('current_post');
-        return $post;
+    public function getParentCategory()
+    {
+        $urlKey = trim($this->request->getPathInfo(), '/');
+        $identifiers = explode('/', $urlKey);
+        if (count($identifiers) == 3) {
+            $identifier = $identifiers[1];
+            $category = $this->_category->getCollection()
+                ->addFieldToFilter('status', array('eq' => 1))
+                ->addFieldToFilter('url_key', array('eq' => $identifier))
+                ->addStoreFilter($this->_storeManager->getStore()->getId())
+                ->getFirstItem();
+            if ($category && $category->getId() && (in_array($this->_storeManager->getStore()->getId(), $category->getStoreId()) || in_array(0, $category->getStoreId()))) {
+                return $category;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
+
+    public function getPostUrl()
+    {
+        $category = $this->getParentCategory();
+        if ($category != false) {
+            return $this->getCurrentPost()->getPostUrlWithCategory($category->getId());
+        } else {
+            return $this->getCurrentPost()->getPostUrlWithNoCategory();
+        }
+    }
+	
+	
+	public function getAllPost() {
+		$post = $this->_post;
+        $postCollection = $post->getCollection()
+            ->addFieldToFilter('status', 1)
+            ->addStoreFilter($this->_storeManager->getStore()->getId())
+            ->setOrder('created_at', $this->getConfig('general_settings/default_sort'));
+			
+		return $postCollection;
+	}
+	
+	
+	public function getAllPostId(){
+        $postCollection = $this->getAllPost();
+		$arrResult = [];
+		if(count($postCollection)>0){
+			foreach($postCollection as $item){
+				$arrResult[] = ['id'=>$item->getId(), 'value'=>$item->getUrlKey(), 'name'=>$item->getTitle()];
+			}
+		}
+		return $arrResult;
+	}
+	
+	public function getUrlPostById($id,$value,$name){
+		$arrResult = [];
+		$route = $this->_blogHelper->getRoute();
+		$route = $route . '/' . $value;
+		$arrResult = ['id'=>$id,'url'=>$route, 'name'=>$name];
+		return $arrResult;
+	}
+	
+	public function getNextPost($id){
+		$arrId = $this->getAllPostId();
+		if(is_array($arrId)){
+			$maxKey = count($arrId) - 1;
+			$key = array_search($id, array_column($arrId, 'id'));
+			if($key == $maxKey){
+				$nextKey = 0;
+			}else {
+				$nextKey = $key + 1;
+			}
+			$idNext = $arrId[$nextKey]['id'];
+			$valueNext = $arrId[$nextKey]['value'];
+			$nameNext = $arrId[$nextKey]['name'];
+			
+			return $this->getUrlPostById($idNext,$valueNext,$nameNext);
+		}
+		return;
+	}
+	
+	public function getPrevPost($id){
+		$arrId = $this->getAllPostId();
+		if(is_array($arrId)){
+			$maxKey = count($arrId) - 1;
+			$key = array_search($id, array_column($arrId, 'id'));
+			if($key == 0){
+				$nextKey = $maxKey;
+			}else {
+				$nextKey = $key - 1;
+			}
+			$idNext = $arrId[$nextKey]['id'];
+			$valueNext = $arrId[$nextKey]['value'];
+			$nameNext = $arrId[$nextKey]['name'];
+			
+			return $this->getUrlPostById($idNext,$valueNext,$nameNext);
+		}
+		return;
+	}
+    
+    public function getGalleryImage($post){
+		if($post->getGalleryImage()){
+			$result = [];
+			$gallery = $post->getGalleryImage();
+			$galleryArray = explode(',',$gallery);
+			if(count($galleryArray)>0){
+				foreach($galleryArray as $img){
+					$filePath = 'sow_blog/gallery/image'.$img;
+					if($filePath!=''){
+						$imageUrl = $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $filePath;
+						$result[] = $imageUrl;
+					}
+				}
+			}
+			return $result;
+		}
+		return 0;
+	}
 }

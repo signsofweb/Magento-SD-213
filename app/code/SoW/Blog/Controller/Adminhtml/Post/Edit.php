@@ -1,125 +1,42 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Controller\Adminhtml\Post;
 
-use Magento\Backend\App\Action;
+namespace SoW\Blog\Controller\Adminhtml\Post;
 
-class Edit extends \Magento\Backend\App\Action
+use SoW\Blog\Controller\Adminhtml\Blog;
+
+class Edit extends Blog
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry = null;
-
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @param Action\Context
-     * @param \Magento\Framework\View\Result\PageFactory
-     * @param \Magento\Framework\Registry
-     */
-    public function __construct(
-        Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry
-    ) {
-        $this->resultPageFactory = $resultPageFactory;
-        $this->_coreRegistry = $registry;
-        parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Field_Blog::post_edit');
-    }
-
-    /**
-     * Init actions
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
-    protected function _initAction()
-    {
-        // load layout, set active menu and breadcrumbs
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Field_Blog::blog_post')
-            ->addBreadcrumb(__('Blog'), __('Blog'))
-            ->addBreadcrumb(__('Manage Posts'), __('Manage Posts'));
-        return $resultPage;
-    }
-
-    /**
-     * Edit CMS page
-     *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
     public function execute()
     {
-        // 1. Get ID and create model
         $id = $this->getRequest()->getParam('post_id');
-        $model = $this->_objectManager->create('Field\Blog\Model\Post');
+        $model = $this->_objectManager->create('SoW\Blog\Model\Post');
 
-        // 2. Initial checking
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This post no longer exists.'));
-                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-                $resultRedirect = $this->resultRedirectFactory->create();
-
-                return $resultRedirect->setPath('*/*/');
+                $this->_redirect('blog/post/index');
+                return;
             }
         }
-
-        // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
+        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
         if (!empty($data)) {
-            $model->setData($data);
+            $model->addData($data);
         }
-
-        // 4. Register model to use later in blocks
         $this->_coreRegistry->register('current_post', $model);
-
-
-        // 5. Build edit form
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->_initAction();
-        $resultPage->addBreadcrumb(
-            $id ? __('Edit Post') : __('New Post'),
-            $id ? __('Edit Post') : __('New Post')
+        $this->_initAction()->_addBreadcrumb(
+            $id ? __('Edit Post') : __('Add New Post'),
+            $id ? __('Edit Post') : __('Add New Post')
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Posts'));
-        $resultPage->getConfig()->getTitle()
-            ->prepend($model->getId() ? $model->getTitle() : __('New Post'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Blog'));
+        $this->_view->getPage()->getConfig()->getTitle()
+            ->prepend($model->getId() ? $model->getTitle() : __('Add New Post'));
+        $this->_view->getLayout()->getBlock('post_edit');
+        $this->_view->renderLayout();
+    }
 
-        return $resultPage;
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('SoW_Blog::edit_post');
     }
 }

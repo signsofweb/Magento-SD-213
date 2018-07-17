@@ -1,108 +1,61 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Controller\Category;
 
-use Magento\Customer\Controller\AccountInterface;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
+namespace SoW\Blog\Controller\Category;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class View extends \Magento\Framework\App\Action\Action
 {
-	/**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $_request;
-
-    /**
-     * @var \Magento\Framework\App\ResponseInterface
-     */
-    protected $_response;
-
-    /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @var \Magento\Framework\Controller\ResultFactory
-     */
-    protected $resultFactory;
-
-    /**
-     * @var \Field\Blog\Helper\Data
-     */
-    protected $_blogHelper;
-
-    /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory
-     */
+    protected $blogHelper;
     protected $resultForwardFactory;
+    protected $_categoryModel;
+    protected $_coreRegistry = null;
 
-    /**
-     * @param Context
-     * @param \Magento\Store\Model\StoreManager
-     * @param \Magento\Framework\View\Result\PageFactory
-     * @param \Field\Blog\Helper\Data
-     * @param \Magento\Framework\Controller\Result\ForwardFactory
-     * @param \Magento\Framework\Registry
-     */
     public function __construct(
-        Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Store\Model\StoreManager $storeManager,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Field\Blog\Helper\Data $blogHelper,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Registry $registry
-        ) {
-        $this->resultPageFactory = $resultPageFactory;
-        $this->_blogHelper = $blogHelper;
+        \SoW\Blog\Helper\Data $blogHelper,
+        \SoW\Blog\Model\Category $categoryModel,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+    )
+    {
+        $this->blogHelper = $blogHelper;
+        $this->_categoryModel = $categoryModel;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->_coreRegistry = $registry;
+        $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
 
-    /**
-     * Default customer account page
-     *
-     * @return \Magento\Framework\View\Result\Page
-     */
+    public function _initCategory()
+    {
+        $categoryId = (int)$this->getRequest()->getParam('category_id', false);
+        if (!$categoryId) {
+            return false;
+        }
+        try {
+            $category = $this->_categoryModel->load($categoryId);
+        } catch (\Exception $e) {
+            return false;
+        }
+        $this->_coreRegistry->register('current_category', $category);
+        return $category;
+    }
+
     public function execute()
     {
-        $page = $this->resultPageFactory->create();
-        $category = $this->_coreRegistry->registry('current_post_category');
-        $blogHelper = $this->_blogHelper;
-        if(!$blogHelper->getConfig('general_settings/enable')|| !$category->getIsActive()){
-            $resultForward = $this->resultForwardFactory->create();
-            return $resultForward->forward('defaultnoroute');
+        if (!$this->blogHelper->getConfig('general_settings/enabled')) {
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
-        $page->addHandle(['type' => 'FIELDBLOG_CATEGORY_VIEW_'.$category->getCategoryId()]);
-        if (($layoutUpdate = $category->getLayoutUpdateXml()) && trim($layoutUpdate)!='') {
-            $page->addUpdate($layoutUpdate);
+        $category = $this->_initCategory();
+        if ($category) {
+            $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+            if ($this->blogHelper->getConfig('general_settings/template')) {
+                $resultPage->getConfig()->setPageLayout($this->blogHelper->getConfig('general_settings/template'));
+            }
+            return $resultPage;
+        } else {
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
-        $page_layout = $category->getPageLayout();
-
-        if($page_layout){
-            $page->getConfig()->setPageLayout($page_layout);
-        }
-        return $page;
     }
 }

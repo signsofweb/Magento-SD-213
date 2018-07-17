@@ -1,174 +1,127 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Model;
 
-use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\DataObject\IdentityInterface;
+namespace SoW\Blog\Model;
 
-class Post extends \Magento\Framework\Model\AbstractModel
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
+use SoW\Blog\Model\Resource\Post as PostResource;
+use SoW\Blog\Model\Resource\Post\Collection;
+use SoW\Blog\Helper\Data;
+use Magento\Framework\UrlInterface;
+use SoW\Blog\Model\Category;
+use SoW\Blog\Model\Comment;
+
+class Post extends AbstractModel
 {
-    /**
-     * Blog's Statuses
-     */
     const STATUS_ENABLED = 1;
-    const STATUS_DISABLED = 0;
+    const STATUS_DISABLED = 2;
 
-    /**
-     * Product collection factory
-     *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    protected $_productCollectionFactory;
+    protected $storeManager;
+    protected $blogHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
-    protected $_storeManager;
-
-    /**
-     * URL Model instance
-     *
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $_url;
-
-    /**
-     * @var \Magento\Catalog\Helper\Category
-     */
-    protected $_blogHelper;
-
-    protected $_resource;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @param \Magento\Framework\Model\Context                          $context                  
-     * @param \Magento\Framework\Registry                               $registry                 
-     * @param \Magento\Store\Model\StoreManagerInterface                $storeManager             
-     * @param \Field\Blog\Model\ResourceModel\Blog|null                      $resource                 
-     * @param \Field\Blog\Model\ResourceModel\Blog\Collection|null           $resourceCollection       
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory 
-     * @param \Magento\Store\Model\StoreManagerInterface                $storeManager             
-     * @param \Magento\Framework\UrlInterface                           $url                      
-     * @param \Field\Blog\Helper\Data                                    $brandHelper              
-     * @param array                                                     $data                     
-     */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Field\Blog\Model\ResourceModel\Post $resource = null,
-        \Field\Blog\Model\ResourceModel\Post\Collection $resourceCollection = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\UrlInterface $url,
-         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Context $context,
+        Registry $registry,
+        StoreManagerInterface $storeManager,
+        PostResource $resource = null,
+        Collection $resourceCollection = null,
+        Data $blogHelper,
+        Category $category,
+        Comment $comment,
         array $data = []
-        ) {
-        $this->_storeManager = $storeManager;
-        $this->_url = $url;
+    )
+    {
+        $this->storeManager = $storeManager;
+        $this->blogHelper = $blogHelper;
+        $this->category = $category;
+        $this->comment = $comment;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_resource = $resource;
-        $this->scopeConfig = $scopeConfig;
     }
 
-	/**
-     * Initialize resource model
-     *
-     * @return void
-     */
     protected function _construct()
     {
-        $this->_init('Field\Blog\Model\ResourceModel\Post');
+        parent::_construct();
+        $this->_init('SoW\Blog\Model\Resource\Post');
     }
 
-    /**
-     * Prepare page's statuses.
-     * Available event cms_page_get_available_statuses to customize statuses.
-     *
-     * @return array
-     */
     public function getAvailableStatuses()
     {
         return [self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled')];
     }
 
-    public function getPostTags()
+    public function getPostUrlWithNoCategory()
     {
-        $connection = $this->_resource->getConnection();
-        $select = 'SELECT * FROM ' . $this->_resource->getTable('field_blog_post_tag') . ' WHERE post_id = "' . $this->getData("post_id") . '"';
-        $tags = $connection->fetchAll($select);
-        return $tags;
+        $route = $this->blogHelper->getRoute();
+        return $route . '/' . $this->getUrlKey();
     }
 
-    public function getPostCategories(){
-        $connection = $this->_resource->getConnection();
-        $select = 'SELECT * FROM ' . $this->_resource->getTable('field_blog_post_category');
-        $categories = $connection->fetchAll($select);
-        $tmp = [];
-        foreach ($categories as $k => $v) {
-            if($v['post_id'] == $this->getData("post_id")){
-                $select = 'SELECT * FROM ' . $this->_resource->getTable('field_blog_category') . ' WHERE category_id = ' . $v['category_id'];
-                $select = $connection->select()->from(['field_blog_category' => $this->_resource->getTable('field_blog_category')])
-                ->where('field_blog_category.category_id = ' . (int)$v['category_id'])
-                ->order('field_blog_category.cat_position DESC');
-                $category = $connection->fetchRow($select);
-                $tmp[] = $category;
-                unset($categories[$k]);
-            }
-        }
-        return $tmp;
-    }
-
-    public function getConfig($key, $store = null)
+    public function getPostUrlWithCategory($categoryId)
     {
-        $store = $this->_storeManager->getStore($store);
-        $websiteId = $store->getWebsiteId();
-
-        $result = $this->scopeConfig->getValue(
-            'fieldblog/'.$key,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store);
-        return $result;
+        $route = $this->blogHelper->getRoute();
+        return $route . '/' . $this->category->load($categoryId)->getUrlKey() . '/' . $this->getUrlKey();
     }
 
-    public function getUrl()
+    public function getThumbnailUrl()
     {
-
-        $url = $this->_storeManager->getStore()->getBaseUrl();
-        $url_prefix = $this->getConfig('general_settings/url_prefix');
-        $url_suffix = $this->getConfig('general_settings/url_suffix');
-        $categoriesUrls = $this->getConfig('general_settings/categories_urls');
-        $urlPrefix = '';
-        if($url_prefix){
-            $urlPrefix = $url_prefix.'/';
-        }
-        $categoryUrl = '';
-        if($categoriesUrls){
-            $category = $this->getPostCategories();
-            if($category && isset($category[0]['identifier']) && $category[0]['identifier']!=''){
-                $categoryUrl = $category[0]['identifier'] . '/';
-            }
-
-        }
-        return $url . $urlPrefix . $categoryUrl . $this->getIdentifier() . $url_suffix;
+        $url = $this->storeManager->getStore()->getBaseUrl(
+                UrlInterface::URL_TYPE_MEDIA
+            ) . 'sow_blog/no_image.png';
+        $thumbnail = $this->getThumbnail();
+        if ($thumbnail) {
+            $url = $this->storeManager->getStore()->getBaseUrl(
+                    UrlInterface::URL_TYPE_MEDIA
+                ) . $thumbnail;
+        };
+        return $url;
     }
-    
+
+    public function getImageUrl()
+    {
+        $url = false;
+        $image = $this->getImage();
+        if ($image) {
+            $url = $this->storeManager->getStore()->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . $image;
+        };
+        return $url;
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData('created_at', $createdAt);
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData('updated_at', $updatedAt);
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->getData('created_at');
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->getData('updated_at');
+    }
+
+    public function getCatetories()
+    {
+        $catetories = $this->category->getCollection()
+            ->addPostFilter($this->getId())
+            ->addStoreFilter($this->storeManager->getStore()->getId());
+        return $catetories;
+    }
+
+    public function getCommentCount()
+    {
+        $comments = $this->comment->getCollection()
+            ->addFieldToFilter('post_id', ['eq' => $this->getId()])
+			->addFieldToFilter('status', ['eq' => 1]);
+        return count($comments);
+    }
 }

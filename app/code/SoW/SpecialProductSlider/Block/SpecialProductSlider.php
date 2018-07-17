@@ -7,6 +7,7 @@ class SpecialProductSlider extends AbstractProduct{
     protected $_template = 'specialproductslider.phtml';
     protected $_config;
     protected $_urlHelper;
+    protected $_cookie;
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
@@ -15,12 +16,14 @@ class SpecialProductSlider extends AbstractProduct{
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\CatalogWidget\Model\Rule $rule, \Magento\Widget\Helper\Conditions $conditionsHelper,
         \Magento\Framework\Url\Helper\Data $urlHelper,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         Config $config,
         array $data = []
     )
     {
         $this->_config = $config;
         $this->_urlHelper = $urlHelper;
+        $this->_cookie = $cookieManager;
         parent::__construct($context, $productCollectionFactory, $catalogProductVisibility, $httpContext, $sqlBuilder, $rule, $conditionsHelper, $data);
     }
     /*

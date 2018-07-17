@@ -1,144 +1,81 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Block\Adminhtml\Category\Edit\Tab;
 
-class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+namespace SoW\Blog\Block\Adminhtml\Category\Edit\Tab;
+
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Data\FormFactory;
+use Magento\Cms\Model\Wysiwyg\Config;
+use SoW\Blog\Model\System\Config\Status;
+use SoW\Blog\Model\System\Config\Yesno;
+
+
+class Main extends Generic implements TabInterface
 {
-    /**
-     * @var \Magento\Store\Model\System\Store
-     */
+    protected $_wysiwygConfig;
+    protected $_status;
+    protected $_yesno;
     protected $_systemStore;
 
-    /**
-     * @var \Magento\Cms\Model\Wysiwyg\Config
-     */
-    protected $_wysiwygConfig;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context
-     * @param \Magento\Framework\Registry
-     * @param \Magento\Framework\Data\FormFactory
-     * @param \Magento\Store\Model\System\Store
-     * @param \Magento\Cms\Model\Wysiwyg\Config
-     * @param array
-     */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Config $wysiwygConfig,
+        Status $status,
+        Yesno $yesno,
         \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         array $data = []
-    ) {
-        $this->_systemStore = $systemStore;
+    )
+    {
         $this->_wysiwygConfig = $wysiwygConfig;
+        $this->_status = $status;
+        $this->_yesno = $yesno;
+        $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
-    /**
-     * Prepare form
-     *
-     * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
+    public function getTabLabel()
+    {
+        return __('General');
+    }
+
+    public function getTabTitle()
+    {
+        return __('General');
+    }
+
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    public function isHidden()
+    {
+        return false;
+    }
+
     protected function _prepareForm()
     {
-        /* @var $model \Magento\Cms\Model\Page */
-        $model = $this->_coreRegistry->registry('blog_category');
-
-        /*
-         * Checking if user have permissions to save information
-         */
-        if ($this->_isAllowedAction('Field_Blog::category_save')) {
-            $isElementDisabled = false;
-        } else {
-            $isElementDisabled = true;
-        }
-
-        /** @var \Magento\Framework\Data\Form $form */
+        $model = $this->_coreRegistry->registry('current_category');
         $form = $this->_formFactory->create();
-
-        $form->setHtmlIdPrefix('category_');
-
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Category Information')]);
-
+        $form->setHtmlIdPrefix('category_general_');
+        $fieldset = $form->addFieldset('general_fieldset', ['legend' => __('General')]);
         if ($model->getId()) {
             $fieldset->addField('category_id', 'hidden', ['name' => 'category_id']);
         }
-
         $fieldset->addField(
-            'name',
+            'title',
             'text',
-            [
-                'name' => 'name',
-                'label' => __('Name'),
-                'title' => __('Name'),
-                'required' => true,
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'category[title]', 'label' => __('Title'), 'title' => __('Title'), 'required' => true]
         );
-
         $fieldset->addField(
-            'identifier',
+            'url_key',
             'text',
-            [
-                'name' => 'identifier',
-                'label' => __('Identifier'),
-                'title' => __('Identifier'),
-                'required' => true,
-                'note' => __('Relative to Web Site Base URL'),
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'category[url_key]', 'label' => __('URL Key'), 'title' => __('URL Key'), 'required' => false, 'class' => 'validate-identifier']
         );
-
-        $fieldset->addField(
-            'image',
-            'image',
-            [
-                'name' => 'image',
-                'label' => __('Image'),
-                'title' => __('Image'),
-                'disabled' => $isElementDisabled
-            ]
-            );
-
-        $wysiwygConfig = $this->_wysiwygConfig->getConfig(['tab_id' => $this->getTabId().time()]);
-
-        $contentField = $fieldset->addField(
-            'description',
-            'editor',
-            [
-                'label' => __('Description'),
-                'title' => __('Description'),
-                'name' => 'description',
-                'style' => 'height:20em;',
-                'disabled' => $isElementDisabled,
-                'config' => $wysiwygConfig
-            ]
-        );
-
-
-        /**
-         * Check is single store mode
-         */
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
                 'store_id',
@@ -148,8 +85,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                     'label' => __('Store View'),
                     'title' => __('Store View'),
                     'required' => true,
-                    'values' => $this->_systemStore->getStoreValuesForForm(false, true),
-                    'disabled' => $isElementDisabled
+                    'values' => $this->_systemStore->getStoreValuesForForm(false, true)
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
@@ -164,85 +100,18 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             );
             $model->setStoreId($this->_storeManager->getStore(true)->getId());
         }
-
         $fieldset->addField(
-            'cat_position',
-            'text',
-            [
-                'name' => 'cat_position',
-                'label' => __('Position'),
-                'title' => __('Position'),
-                'disabled' => $isElementDisabled
-            ]
-        );
-
-        $fieldset->addField(
-            'is_active',
+            'status',
             'select',
-            [
-                'label' => __('Status'),
-                'title' => __('Category Status'),
-                'name' => 'is_active',
-                'options' => $model->getAvailableStatuses(),
-                'disabled' => $isElementDisabled
-            ]
+            ['name' => 'category[status]', 'label' => __('Status'), 'title' => __('Status'), 'options' => $this->_status->toOptionArray()]
         );
-        if (!$model->getId()) {
-            $model->setData('is_active', $isElementDisabled ? '0' : '1');
-        }
-
-        $this->_eventManager->dispatch('adminhtml_blog_category_edit_tab_main_prepare_form', ['form' => $form]);
-
+        $fieldset->addField(
+            'sort_order',
+            'text',
+            ['name' => 'category[sort_order]', 'label' => __('Sort Order'), 'title' => __('Sort Order'), 'required' => false]
+        );
         $form->setValues($model->getData());
         $this->setForm($form);
-
         return parent::_prepareForm();
-    }
-
-    /**
-     * Prepare label for tab
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getTabLabel()
-    {
-        return __('Category Information');
-    }
-
-    /**
-     * Prepare title for tab
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getTabTitle()
-    {
-        return __('Category Information');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isHidden()
-    {
-        return false;
-    }
-
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
     }
 }

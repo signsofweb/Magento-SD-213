@@ -1,205 +1,181 @@
 <?php
-/**
- * Fieldthemes
- * 
- * NOTICE OF LICENSE
- * 
- * This source file is subject to the Fieldthemes.com license that is
- * available through the world-wide-web at this URL:
- * http://www.fieldthemes.com/license-agreement.html
- * 
- * DISCLAIMER
- * 
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- * 
- * @category   Fieldthemes
- * @package    Field_Blog
- * @copyright  Copyright (c) 2014 Fieldthemes (http://www.fieldthemes.com/)
- * @license    http://www.fieldthemes.com/LICENSE-1.0.html
- */
-namespace Field\Blog\Controller\Adminhtml\Post;
 
-use Magento\Backend\App\Action;
+namespace SoW\Blog\Controller\Adminhtml\Post;
+
 use Magento\Framework\App\Filesystem\DirectoryList;
+use SoW\Blog\Controller\Adminhtml\Blog;
+use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Blog
 {
-
-    /**
-     * @var \Magento\Backend\Helper\Js
-     */
-    protected $jsHelper;
-
-    /**
-     * @param Action\Context
-     * @param \Magento\Framework\Filesystem
-     * @param \Magento\Backend\Helper\Js
-     */
-    public function __construct(
-        Action\Context $context,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Backend\Helper\Js $jsHelper
-        )
-    {
-        $this->_fileSystem = $filesystem;
-        $this->jsHelper = $jsHelper;
-        parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Field_Blog::post_save');
-    }
-
-    /**
-     * Save action
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
-     */
     public function execute()
     {
-        $data = $this->getRequest()->getPostValue(); 
-
-        $links = $this->getRequest()->getPost('links');
-        $links = is_array($links) ? $links : [];
-        if(!empty($links) && isset($links['posts'])){
-            $postsRelated = $this->jsHelper->decodeGridSerializedInput($links['posts']);
-            $data['posts_related'] = $postsRelated;
-        }
-        
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        if ($data) {
-            $model = $this->_objectManager->create('Field\Blog\Model\Post');
-            $first_thumbnail = $first_image = "";
-
-            $id = $this->getRequest()->getParam('post_id');
-            if ($id) {
-                $model->load($id);
-                $first_thumbnail = $model->getThumbnail();
-                $first_image = $model->getImage();
-            }
-
-            /** @var \Magento\Framework\Filesystem\Directory\Read $mediaDirectory */
-            $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')
-            ->getDirectoryRead(DirectoryList::MEDIA);
-            $mediaFolder = 'field/blog/';
-            $path = $mediaDirectory->getAbsolutePath($mediaFolder);
-
-            // Delete, Upload Image
-            $imagePath = $mediaDirectory->getAbsolutePath($model->getImage());
-            if(isset($data['image']['delete']) && file_exists($imagePath)){
-                unlink($imagePath);
-                $data['image'] = '';
-            }else{
-                if(isset($data['image']) && is_array($data['image'])){
-                    unset($data['image']);
-                }
-                if($image = $this->uploadImage('image')){
-                    $data['image'] = $image;
-                    $first_image = $image;
-                }
-            }
-
-            // Delete, Upload Thumbnail
-            $thumbnailPath = $mediaDirectory->getAbsolutePath($model->getThumbnail());
-            if(isset($data['thumbnail']['delete']) && file_exists($thumbnailPath)){
-                unlink($thumbnailPath);
-                $data['thumbnail'] = '';
-            }else{
-                if(isset($data['thumbnail']) && is_array($data['thumbnail'])){
-                    unset($data['thumbnail']);
-                }
-                if($thumbnail = $this->uploadImage('thumbnail')){
-                    $data['thumbnail'] = $thumbnail;
-                    $first_thumbnail = $thumbnail;
-                }
-            }
-
-            $model->setData($data);
-
-            $this->_eventManager->dispatch(
-                'blog_post_prepare_save',
-                ['post' => $model, 'request' => $this->getRequest()]
-            );
-
+        if ($this->getRequest()->getPostValue()) {
             try {
+                $blogHelper = $this->_objectManager->create('SoW\Blog\Helper\Data');
+                $model = $this->_objectManager->create('SoW\Blog\Model\Post');
+                $data = $this->getRequest()->getPostValue();
+                $inputFilter = new \Zend_Filter_Input(
+                    [],
+                    [],
+                    $data
+                );
+                $data = $inputFilter->getUnescaped();
+                $id = $this->getRequest()->getParam('post_id');
+                if ($id) {
+                    $model->load($id);
+                    if ($id != $model->getId()) {
+                        throw new LocalizedException(__('The wrong post is specified.'));
+                    }
+                }
+                if (isset($_FILES['thumbnail']['name']) && $_FILES['thumbnail']['name'] != '') {
+                    $uploader = $this->_objectManager->create(
+                        'Magento\MediaStorage\Model\File\Uploader',
+                        ['fileId' => 'thumbnail']
+                    );
+                    $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png', 'svg']);
+                    $uploader->setAllowRenameFiles(true);
+                    $uploader->setAllowCreateFolders(true);
+                    $uploader->setFilesDispersion(true);
+                    $ext = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
+                    if ($uploader->checkAllowedExtension($ext)) {
+                        $path = $this->_objectManager->get('Magento\Framework\Filesystem')->getDirectoryRead(DirectoryList::MEDIA)
+                            ->getAbsolutePath('sow_blog/');
+                        $uploader->save($path);
+                        $fileName = $uploader->getUploadedFileName();
+                        if ($fileName) {
+                            $data['post']['thumbnail'] = 'sow_blog' . $fileName;
+                        }
+                    } else {
+                        $this->messageManager->addError(__('Disallowed file type.'));
+                        return $this->redirectToEdit($model, $data);
+                    }
+                } else {
+                    if (isset($data['thumbnail']['delete']) && $data['thumbnail']['delete'] == 1) {
+                        $data['post']['thumbnail'] = '';
+                    } else {
+                        unset($data['thumbnail']);
+                    }
+                }
+                if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != '') {
+                    $uploader = $this->_objectManager->create(
+                        'Magento\MediaStorage\Model\File\Uploader',
+                        ['fileId' => 'image']
+                    );
+                    $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png', 'svg']);
+                    $uploader->setAllowRenameFiles(true);
+                    $uploader->setAllowCreateFolders(true);
+                    $uploader->setFilesDispersion(true);
+                    $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                    if ($uploader->checkAllowedExtension($ext)) {
+                        $path = $this->_objectManager->get('Magento\Framework\Filesystem')->getDirectoryRead(DirectoryList::MEDIA)
+                            ->getAbsolutePath('sow_blog/');
+                        $uploader->save($path);
+                        $fileName = $uploader->getUploadedFileName();
+                        if ($fileName) {
+                            $data['post']['image'] = 'sow_blog' . $fileName;
+                        }
+                    } else {
+                        $this->messageManager->addError(__('Disallowed file type.'));
+                        return $this->redirectToEdit($model, $data);
+                    }
+                } else {
+                    if (isset($data['image']['delete']) && $data['image']['delete'] == 1) {
+                        $data['post']['image'] = '';
+                    } else {
+                        unset($data['image']);
+                    }
+                }
+                if (!isset($data['post']['url_key']) || $data['post']['url_key'] == '') {
+                    $urlKey = $this->_objectManager->get('Magento\Catalog\Model\Product\Url')->formatUrlKey($data['post']['title']);
+                    $existUrlKeys = $this->_objectManager->create('SoW\Blog\Model\Post')->getCollection()->addFieldToFilter('url_key', ['eq' => $urlKey]);
+                    if (count($existUrlKeys)) {
+                        $data['post']['url_key'] = $urlKey . '-' . rand();
+                    } else {
+                        $data['post']['url_key'] = $urlKey;
+                    }
+                }
+                if (isset($data['post']['tags'])) {
+                    if ($id) {
+                        $model->load($id);
+                        $originalTags = explode(',', $model->getTags());
+                    } else {
+                        $originalTags = array();
+                    }
+                    $tags = explode(',', $data['post']['tags']);
+                    array_walk($tags, 'trim');
+                    foreach ($tags as $key => $tag) {
+                        $tags[$key] = $blogHelper->convertSlashes($tag, 'forward');
+                    }
+                    $tags = array_unique($tags);
+                    $commonTags = array_intersect($tags, $originalTags);
+                    $removedTags = array_diff($originalTags, $commonTags);
+                    $addedTags = array_diff($tags, $commonTags);
+                    if (count($tags)) {
+                        $data['post']['tags'] = trim(implode(',', $tags));
+                    } else {
+                        $data['post']['tags'] = '';
+                    }
+                }
+                $model->setData($data['post'])
+                    ->setId($this->getRequest()->getParam('post_id'));
+                if (isset($data['post']['created_at']) && $data['post']['created_at']) {
+                    $model->setUpdatedAt($this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate());
+                } else {
+                    $model->setCreatedAt($this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate());
+                    $model->setUpdatedAt($this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate());
+                }
+                $userData = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser()->getData();
+                if (isset($data['post']['user']) && $data['post']['user']) {
+                    $model->setUpdatedByUser($userData['username']);
+                } else {
+                    $model->setUser($userData['username']);
+                }
+                if (isset($data['categories'])) {
+                    $model->setCategories($data['categories']);
+                } else {
+                    $model->setCategories(null);
+                }
+                $model->setStores($data['stores']);
+                $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+                $session->setPageData($model->getData());
+                
+                if (isset($data['gallery_image'])) {
+                    $model->setGalleryImage($data['gallery_image']);
+                }
+                
                 $model->save();
-
-                $this->messageManager->addSuccess(__('You saved this post.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->messageManager->addSuccess(__('You saved the post.'));
+                $session->setPageData(false);
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['post_id' => $model->getId(), '_current' => true]);
+                    $this->_redirect('blog/post/edit', ['post_id' => $model->getId()]);
+                    return;
                 }
-                if(!$this->getRequest()->getParam("duplicate")){
-                    return $resultRedirect->setPath('*/*/');
+                $this->_redirect('blog/post/index');
+                return;
+            } catch (LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $id = (int)$this->getRequest()->getParam('post_id');
+                if (!empty($id)) {
+                    $this->_redirect('blog/post/edit', ['post_id' => $id]);
+                } else {
+                    $this->_redirect('blog/post/new');
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                return;
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the post.'));
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError(
+                    __('Something went wrong while saving the post data. Please review the error log.')
+                );
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->_redirect('blog/post/edit', ['post_id' => $this->getRequest()->getParam('post_id')]);
+                return;
             }
-
-            if($this->getRequest()->getParam("duplicate")){
-                unset($data['post_id']);
-                $data['identifier'] = $data['identifier'] . time() . uniqid();
-                $data['image'] = $first_image;
-                $data['thumbnail'] = $first_thumbnail;
-                $post = $this->_objectManager->create('Field\Blog\Model\Post');
-                $post->setData($data);
-                try{
-                    $post->save();
-                    $id = $post->getId();
-                    $this->messageManager->addSuccess(__('You duplicated this post'));
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $this->messageManager->addError($e->getMessage());
-                } catch (\RuntimeException $e) {
-                    $this->messageManager->addError($e->getMessage());
-                } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong while duplicating the post.'));
-                }
-            }
-
-            $this->_getSession()->setFormData($data);
-            return $resultRedirect->setPath('*/*/edit', ['post_id' => $id]);
         }
-        return $resultRedirect->setPath('*/*/');
+        $this->_redirect('blog/post/index');
     }
 
-    public function uploadImage($fieldId = 'image')
+    protected function _isAllowed()
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
-
-        if (isset($_FILES[$fieldId]) && $_FILES[$fieldId]['name']!='') 
-        {
-            $uploader = $this->_objectManager->create(
-                'Magento\Framework\File\Uploader',
-                array('fileId' => $fieldId)
-                );
-
-            $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')
-            ->getDirectoryRead(DirectoryList::MEDIA);
-            $mediaFolder = 'field/blog/';
-            try {
-                $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png')); 
-                $uploader->setAllowRenameFiles(true);
-                $uploader->setFilesDispersion(false);
-                $result = $uploader->save($mediaDirectory->getAbsolutePath($mediaFolder)
-                    );
-                return $mediaFolder.$result['name'];
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
-                $this->messageManager->addError($e->getMessage());
-                return $resultRedirect->setPath('*/*/edit', ['category_id' => $this->getRequest()->getParam('category_id')]);
-            }
-        }
-        return;
+        return $this->_authorization->isAllowed('SoW_Blog::save_post');
     }
 }

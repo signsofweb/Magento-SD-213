@@ -107,15 +107,7 @@ use Magento\Framework\App\Action\Action;
                                         </a>
                                     <?php endif; ?>
                                     <!-- Add To compare-->
-                                    <?php $compareHelper = $this->helper('SoW\AjaxPattern\Helper\Data'); ?>
-                                    <a class="action compare "
-                                       title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
-                                       aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
-                                       data-compare='<?php /* @escapeNotVerified */ echo $compareHelper->getCompareData($_item); ?>'
-                                       data-action="<?= $compareHelper->getDataAction($_item->getId())?>"
-                                       role="button">
-                                        <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
-                                    </a>
+
                                     <!--Quick view-->
                                     <a href="javascript:void(0)" class="action quickview"><i class="fa fa-eye"></i><?php /* @escapeNotVerified */ echo __('Quick view') ?></a>
                                 </div>
