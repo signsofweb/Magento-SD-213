@@ -14,27 +14,50 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected $urlEncoder;
 
-    protected $_listcompare;
+    protected $_itemCollection;
+
+    protected $_itemCollectionFactory;
+
+    private $_storeManager;
+
+    protected $_customerSession;
+
+    protected $_customerId = null;
+
+    protected $_customerVisitor;
+
+    protected $_catalogProductVisibility;
+
+    protected $_catalogSession;
 
     public function __construct(
         Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Data\Helper\PostHelper $postHelper,
-        \Magento\Catalog\Model\Product\Compare\ListCompare $listcompare
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Model\Visitor $customerVisitor,
+        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
+        \Magento\Catalog\Model\Session $catalogSession
     )
     {
-
         $this->_jsonEncoder = $jsonEncoder;
         $this->postHelper = $postHelper;
         $this->_urlBuilder = $context->getUrlBuilder();
         $this->urlEncoder = $context->getUrlEncoder();
-        $this->_listcompare = $listcompare;
+        $this->_itemCollectionFactory = $itemCollectionFactory;
+        $this->_storeManager = $storeManager;
+        $this->_customerSession = $customerSession;
+        $this->_customerVisitor = $customerVisitor;
+        $this->_catalogProductVisibility = $catalogProductVisibility;
+        $this->_catalogSession = $catalogSession;
         parent::__construct($context);
     }
 
     public function getDataAction($id){
         $data = 'add';
-        $ids = $this->_listcompare->getItemCollection()->getAllIds();
+        $ids = $this->getItemCollection()->getAllIds();
         foreach ($ids as $item_id){
             if ($id == $item_id){
                 $data = 'remove';
@@ -85,6 +108,40 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $url = $this->_urlBuilder->getCurrentUrl();
         }
         return $this->urlEncoder->encode($url);
+    }
+    public function getItemCollection()
+    {
+        if (!$this->_itemCollection) {
+            // cannot be placed in constructor because of the cyclic dependency which cannot be fixed with proxy class
+            // collection uses this helper in constructor when calling isEnabledFlat() method
+            $this->_itemCollection = $this->_itemCollectionFactory->create();
+            $this->_itemCollection->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+
+            if ($this->_customerSession->isLoggedIn()) {
+                $this->_itemCollection->setCustomerId($this->_customerSession->getCustomerId());
+            } elseif ($this->_customerId) {
+                $this->_itemCollection->setCustomerId($this->_customerId);
+            } else {
+                $this->_itemCollection->setVisitorId($this->_customerVisitor->getId());
+            }
+
+            $this->_itemCollection->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
+
+            /* Price data is added to consider item stock status using price index */
+            $this->_itemCollection->addPriceData();
+
+            $this->_itemCollection->addAttributeToSelect('name')->addUrlRewrite()->load();
+
+            /* update compare items count */
+            $this->_catalogSession->setCatalogCompareItemsCount(count($this->_itemCollection));
+        }
+
+        return $this->_itemCollection;
+    }
+    public function setCustomerId($id)
+    {
+        $this->_customerId = $id;
+        return $this;
     }
 
 }
