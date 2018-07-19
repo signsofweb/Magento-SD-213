@@ -7,8 +7,8 @@
 -->
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="helper.compare.all.pages" template="SoW_AjaxPattern::compare/helper_compare.phtml"  cacheable="false"/>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template" name="ajax.status" template="SoW_AjaxPattern::ajax_status.phtml"/>
         </referenceContainer>
     </body>
 </page>

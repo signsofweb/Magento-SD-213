@@ -18,6 +18,8 @@ define([
         _Events: function () {
             var $widget = this;
             $widget.element.on('click', function () {
+                $(this).attr('disabled','disabled');
+                $('#ajax_alert').addClass('processing');
                 if($widget.element.attr('data-action') == 'add'){
                     $widget._addItem({
                         'id': $(this).data('compare').id,
@@ -47,8 +49,7 @@ define([
             this.compareProducts().items.push(item);
             this.compareProducts().count++;
             this.compareProducts().countCaption = this.compareProducts().count == 1 ? this.compareProducts().count + ' Item' : this.compareProducts().count + ' Items';
-            this.compareProducts.valueHasMutated(); // HACK: Does not update view if called from within jQuery.on(), so this is needed for some reason.
-            console.log(this.compareProducts());
+            this.compareProducts.valueHasMutated();
             var addData = JSON.parse(item.add_data);
             var formKey = $(this.options.formKeyInputSelector).val();
             if (formKey) {
@@ -60,6 +61,15 @@ define([
                 data: addData.data,
                 success: function (data, testStatus, jqXHR) {
                     $widget.element.attr('data-action','remove');
+                    $widget.element.find('i').removeClass('fa-retweet');
+                    $widget.element.find('i').addClass('fa-check');
+                    $widget.element.removeAttr('disabled');
+                    $('#ajax_alert').addClass('success');
+                    setTimeout(
+                        function(){
+                            $('#ajax_alert').removeClass('processing');
+                            $('#ajax_alert').removeClass('success');
+                        }, 5000);
                     // TODO: Check for data.success === true to determine if it was an actual success.
                     if (data.success == false) {
                         alert('actually false');
@@ -83,6 +93,15 @@ define([
                 data: removeData.data,
                 success: function (data, testStatus, jqXHR) {
                     $widget.element.attr('data-action','add');
+                    $widget.element.removeAttr('disabled');
+                    $widget.element.find('i').removeClass('fa-check');
+                    $widget.element.find('i').addClass('fa-retweet');
+                    $('#ajax_alert').addClass('success');
+                    setTimeout(
+                        function(){
+                            $('#ajax_alert').removeClass('processing');
+                            $('#ajax_alert').removeClass('success');
+                        }, 5000);
                     // TODO: Check for data.success === true to determine if it was an actual success.
                     if (data.success == false) {
                         alert('actually false');

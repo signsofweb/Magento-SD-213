@@ -55,15 +55,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct($context);
     }
 
-    public function getDataAction($id){
-        $data = 'add';
+    public function isAdded($id){
+        $isAdded = false;
         $ids = $this->getItemCollection()->getAllIds();
         foreach ($ids as $item_id){
             if ($id == $item_id){
-                $data = 'remove';
+                $isAdded = true;
             }
         }
-        return $data;
+        return $isAdded;
     }
     public function getCompareData(\Magento\Catalog\Api\Data\ProductInterface $product)
     {

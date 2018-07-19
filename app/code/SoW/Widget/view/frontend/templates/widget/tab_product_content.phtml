@@ -77,25 +77,28 @@ $items = $block->getProductCollection()->getItems();
                                 <?php endif; ?>
                                 <!-- Add to wishlist -->
                                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
-                                    <a href="#"
+                                    <button href="#"
                                        data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($_item); ?>'
                                        class="action towishlist" data-action="add-to-wishlist"
                                        title="<?php /* @escapeNotVerified */ echo __('Add to Wish List') ?>">
-                                        <span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span>
-                                    </a>
+                                      <i class="fa fa-heart"></i>
+                                    </button>
                                 <?php endif; ?>
                                 <?php $compareHelper = $this->helper('SoW\AjaxPattern\Helper\Data');?>
-                                <a
+                                <button
                                         class="action compare"
                                         title="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
                                         aria-label="<?php echo $block->escapeHtml(__('Add to Compare')); ?>"
                                         data-compare='<?php /* @escapeNotVerified */ echo $compareHelper->getCompareData($_item); ?>'
-                                        data-action='<?php echo $compareHelper->getDataAction($_item->getId())?>'
+                                        data-action='<?= ($compareHelper->isAdded($_item->getId()))? 'remove' : 'add'; ?>'
                                         role="button">
-                                    <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
-                                </a>
+                                     <i class="fa <?= ($compareHelper->isAdded($_item->getId()))? 'fa-check' : 'fa-retweet'; ?>"></i>
+                                    <span><?php
+//                                        /* @escapeNotVerified */ echo __('Add to Compare')
+                                        ?></span>
+                                </button>
                                 <!--Quick view-->
-                                <a href="javascript:void(0)" class="action quickview"><i class="fa fa-eye"></i><?php /* @escapeNotVerified */ echo __('Quick view') ?></a>
+                                <button class="action quickview"><i class="fa fa-eye"></i></button>
                             </div>
                         </div>
                     </div>
