@@ -1,8 +1,9 @@
 <?php
 $collection = $block->getSliderCollection();
 ?>
+<h3>Slider Show</h3>
 <?php if(count($collection) > 0 ):?>
-<div id="sow_slideshow" class="sow_owlcarousel">
+<div id="sow-slideshow" class="sow-owlcarousel">
         <div class="owl-carousel" data-slider='<?php echo $block->getDataSlider()?>'>
             <?php foreach ($collection as $slider): ?>
                  <div class="sow_item">

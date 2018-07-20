@@ -6,9 +6,6 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <body>
-        <referenceContainer name="content">
-            <block class="SoW\Slideshow\Block\Slider\Slidershow" name="home.page.slider" template="SoW_Slideshow::slidershow.phtml"/>
-        </referenceContainer>
-    </body>
+    <update handle="testimonial_testimonial_edit"/>
+    <body/>
 </page>

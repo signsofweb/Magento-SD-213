@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="signsofweb" translate="label" sortOrder="10">
+            <label>Signs Of Web</label>
+        </tab>
+        <section id="testimonial" translate="label" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Slide Show</label>
+            <tab>signsofweb</tab>
+            <resource>SoW_Testimonial::testimonial_config</resource>
+            <group id="popup_newsletter" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Slide Show Settings</label>
+                <field id="status" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[<br/>]]></comment>
+                </field>
+                <field id="detail_content" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Popup Content</label>
+                    <frontend_model>SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+                </field>
+                <field id="popup_title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Popup title</label>
+                </field>
+                <field id="popup_description" translate="label comment" type="editor" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Description</label>
+                    <frontend_model>SoW\Base\Block\Adminhtml\System\Config\Form\Field\Editor</frontend_model>
+                </field>
+                <field id="detail_heading" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Popup Settings</label>
+                    <frontend_model>SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading</frontend_model>
+                </field>
+                <field id="popup_width" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Popup Width</label>
+                </field>
+                <field id="popup_height" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Popup Height</label>
+                </field>
+                <field id="bg_image" translate="label" type="image" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Background Image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">sow/popupnewsletter</upload_dir>
+                    <base_url type="media" scope_info="1">sow/popupnewsletter</base_url>
+                    <comment><![CDATA[Allowed file types: jpeg, gif, png.]]></comment>
+                </field>
+                <field id="static_block" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Static Block ID</label>
+                    <source_model>SoW\Base\Model\System\Config\Source\StaticBlocks</source_model>
+                    <comment><![CDATA[Choose a static block to show on popup.]]></comment>
+                </field>
+                <field id="cookie_time" translate="label comment" type="text" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cookie Time</label>
+                    <comment><![CDATA[Time in days of storing cookie. After that time popup will be showed again.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
