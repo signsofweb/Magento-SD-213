@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Manufacturer Collection -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="brand_manufacturer_listing_data_source" xsi:type="string">SoW\Brand\Model\ResourceModel\Manufacturer\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="SoW\Brand\Model\ResourceModel\Manufacturer\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">sow_manufacturer</argument>
+            <argument name="resourceModel" xsi:type="string">SoW\Brand\Model\ResourceModel\Manufacturer</argument>
+        </arguments>
+    </virtualType>
+
+    <!--Images Uploader-->
+    <type name="SoW\Brand\Controller\Adminhtml\Manufacturer\Image\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">SoW\Brand\ManufacturerUpload</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="SoW\Brand\ManufacturerUpload" type="Magento\Catalog\Model\ImageUploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">sow/brand/tmp/manufacturers</argument>
+            <argument name="basePath" xsi:type="string">sow/brand/manufacturers</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- Store Manager -->
+
+
+</config>

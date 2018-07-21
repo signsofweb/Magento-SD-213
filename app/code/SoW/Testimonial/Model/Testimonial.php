@@ -4,14 +4,15 @@ namespace SoW\Testimonial\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\UrlInterface;
-//\Magento\Catalog\Model\ResourceModel\Product $resource,
-//        \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection,
+
 class Testimonial extends AbstractModel
 {
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;
     const SLIDER_URL_MEDIA = 'sow/testimonial/testimonials/';
     protected  $_urlBuilder;
+
+
     protected function _construct()
     {
         $this->_init('SoW\Testimonial\Model\ResourceModel\Testimonial');
@@ -39,12 +40,19 @@ class Testimonial extends AbstractModel
     public function getStoreIds(){
         return $this->getData('store_ids');
     }
-    public function getTestimonialUrl(){
+    public function getImage($size){
+
             $image = $this->getData('testimonial_image');
             $path = self::SLIDER_URL_MEDIA . $image;
-            return $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
+            $url =  $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
+            $html = '<img src="'.$url.'" width="'.$size['width'].'" height="'.$size['height'].'" alt="'. $this->getTestimonialName() .'"/>';
+            return $html;
+
     }
     public function getTestimonialName(){
         return $this->getData('testimonial_name');
+    }
+    public function getTestimonialContent(){
+        return $this->getData('testimonial_content');
     }
 }

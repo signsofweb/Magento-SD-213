@@ -3,13 +3,13 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="SoW_Testimonial::testimonial_section" title="Testimonial" sortOrder="10">
-                    <resource id="SoW_Testimonial::testimonials_manage" title="Manage Testimonials" sortOrder="100"/>
+                <resource id="SoW_Brand::brand_section" title="Brand" sortOrder="10">
+                    <resource id="SoW_Brand::manufacturers_manage" title="Manage Manufacturers" sortOrder="100"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="SoW_Testimonial::testimonial_config" title="Testimonial"/>
+                            <resource id="SoW_Brand::brand_config" title="Brand"/>
                         </resource>
                     </resource>
                 </resource>

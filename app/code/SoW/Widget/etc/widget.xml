@@ -8,7 +8,7 @@
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="productslider" class="SoW\Widget\Block\Product\ProductSlider">
-        <label translate="true">SoW Product Slider</label>
+        <label translate="true">SoW: Product Slider</label>
         <description translate="true">List of Products</description>
         <parameters>
             <parameter name="general_settings_heading" xsi:type="conditions" visible="true" sort_order="0" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">
@@ -76,7 +76,7 @@
         </parameters>
     </widget>
     <widget id="tabproductslider" class="SoW\Widget\Block\Product\TabProductSlider">
-        <label translate="true">SoW Tab Product Slider</label>
+        <label translate="true">SoW: Tab Product Slider</label>
         <description></description>
         <parameters>
             <parameter name="general_settings_heading" xsi:type="conditions" visible="true" sort_order="0" class="SoW\Base\Block\Adminhtml\System\Config\Form\Field\Heading">

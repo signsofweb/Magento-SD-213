@@ -6,9 +6,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <update handle="editor"/>
     <body>
         <referenceContainer name="content">
-            <block class="SoW\Testimonial\Block\Testimonial\Testimonialshow" name="home.page.testimonial" template="SoW_Testimonial::testimonialshow.phtml"/>
+            <uiComponent name="brand_manufacturer_form"/>
         </referenceContainer>
     </body>
 </page>

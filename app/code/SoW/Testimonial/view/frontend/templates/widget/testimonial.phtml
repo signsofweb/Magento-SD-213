@@ -1,0 +1,29 @@
+<?php
+$title = $block->getOptions('widget_title');
+$items = $block->getTestimonialCollection();
+$size = array();
+$size['width'] =100;
+$size['height'] =100;
+
+?>
+<?php if(count($items) > 0 ): ?>
+<div class="sow-testimonial sow-owlcarousel">
+    <?php if ($title): ?>
+        <div class="sow-title">
+            <h3><span><?php /* @escapeNotVerified */
+                    echo $title; ?></span></h3>
+        </div>
+    <?php endif ?>
+    <div class="sow-content">
+        <div class="sow-items owl-carousel" data-slider='<?php echo $block->getDataSlider() ?>'>
+            <?php foreach ($items as $item): ?>
+            <div class="sow-item">
+               <div class="image"><?php echo $item->getImage($size) ?></div>
+                <div class="content"><?php echo $item->getTestimonialContent() ?></div>
+                <div class="name"><?php echo $item->getTestimonialName() ?></div>
+            </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+</div>
+<?php endif?>
