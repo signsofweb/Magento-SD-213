@@ -4,8 +4,7 @@ namespace SoW\Brand\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\UrlInterface;
-//\Magento\Catalog\Model\ResourceModel\Product $resource,
-//        \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection,
+
 class Manufacturer extends AbstractModel
 {
     const STATUS_ENABLED = 1;
@@ -29,22 +28,31 @@ class Manufacturer extends AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
     public function getAvailableStatus(){
         return [
             self::STATUS_ENABLED => 'Enabled',
             self::STATUS_DISABLED  => 'Disabled'
         ];
     }
+
     public function getStoreIds(){
         return $this->getData('store_ids');
     }
-    public function getManufacturerUrl(){
-            $image = $this->getData('manufacturer_image');
-            $path = self::SLIDER_URL_MEDIA . $image;
-            return $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
+
+    public function getImage($size){
+
+        $image = $this->getData('manufacturer_image');
+        $path = self::SLIDER_URL_MEDIA . $image;
+        $url =  $this->_urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
+        $html = '<img src="'.$url.'" width="'.$size['width'].'" height="'.$size['height'].'" alt="'. $this->getManufacturerName() .'"/>';
+        return $html;
+
     }
     public function getManufacturerName(){
         return $this->getData('manufacturer_name');
+    }
+
+    public function getLink(){
+        return $this->getData('manufacturer_link');
     }
 }
