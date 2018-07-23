@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="footer-container" htmlClass="footer">
+            <referenceContainer name="footer" htmlClass="footer-content">
+                <block class="SoW\Base\Block\Footer\Template" name="footer.block" template="SoW_Base::footer/footer.phtml">
+                    <block class="Magento\Store\Block\Switcher" name="store_switcher" template="SoW_Base::footer/switch_stores.phtml"/>
+                    <block class="Magento\Newsletter\Block\Subscribe" name="footer.newsletter" template="SoW_Base::footer/subscribe.phtml"/>
+                </block>
+            </referenceContainer>
+        </referenceContainer>
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceBlock name="form.subscribe" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+        <referenceContainer name="before.body.end">
+            <block name="before.body.end.totop" class="Magento\Framework\View\Element\Template" template="SoW_Base::to_top.phtml" />
+        </referenceContainer>
+    </body>
+</page>

@@ -28,6 +28,7 @@ require([
                }
            })
            $(this).owlCarousel({
+
                animateIn: 'fadeOutRight',
                animateOut: 'fadeInLeft',
                autoplay: options.autoplay,

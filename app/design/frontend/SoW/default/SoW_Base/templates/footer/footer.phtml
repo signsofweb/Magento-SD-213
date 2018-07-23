@@ -1,0 +1,18 @@
+<div class="footer-top">
+    <h3>top</h3>
+</div>
+<div class="footer-center">
+    <h3>center</h3>
+</div>
+<?php
+$copyright = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-bottom-copyright')->toHtml();
+$social = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-bottom-social')->toHtml();
+?>
+<div class="footer-bottom">
+    <div class="container">
+        <div class="row">
+           <div class="sow-copyright"><?php echo $copyright;?></div>
+            <div class="sow-social"><?php echo $social;?></div>
+        </div>
+    </div>
+</div>

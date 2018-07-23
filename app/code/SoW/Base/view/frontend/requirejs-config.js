@@ -1,13 +1,13 @@
 var config = {
 	"map": {
 		"*": {
-			"owlcarousel": "SoW_Base/js/owl.carousel.min",
+			"sowowlcarousel": "SoW_Base/js/sow_owl_carousel",
 			"magnificPopup": "SoW_Base/js/jquery.magnific-popup.min",
 			"easytab": "SoW_Base/js/sow_easy_tab"
 		}
 	},
 	"paths": {
-        "owlcarousel": "SoW_Base/js/owl.carousel.min",
+        "sowowlcarousel": "SoW_Base/js/sow_owl_carousel",
         "magnificPopup": "SoW_Base/js/jquery.magnific-popup.min",
         "easytab": "SoW_Base/js/sow_easy_tab"
 	},   

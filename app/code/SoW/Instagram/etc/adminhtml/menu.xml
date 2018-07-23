@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SoW_Instagram::instagram_section" title="Instagram" module="SoW_Instagram" sortOrder="80" parent="SoW_Base::base" resource="SoW_Instagram::instagram_section"/>
+        <add id="SoW_Instagram::instagrams_manage" title="Manage Instagrams" module="SoW_Instagram" sortOrder="10" parent="SoW_Instagram::instagram_section" action="instagram/instagram/index" resource="SoW_Instagram::instagrams_manage"/>
+    </menu>
+</config>
