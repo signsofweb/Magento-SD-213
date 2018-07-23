@@ -10,6 +10,7 @@
         <css src="css/library/bootstrap.min.css" />
         <css src="css/library/owl.carousel.min.css" />
         <css src="css/library/magnific-popup.min.css" />
+        <css src="css/library/animate.css" />
         <css src="css/library/font-awesome/css/font-awesome.min.css" />
         <css src="css/web.css" media="screen and (min-width: 320px)"/>
     </head>
