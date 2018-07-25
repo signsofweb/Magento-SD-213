@@ -7,19 +7,51 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="page.wrapper">
+            <block class="SoW\Base\Block\Header\Template" name="sow.header" template="header/header.phtml" before="main.content">
+
+                <!--<block class="Magento\Customer\Block\Form\Login" name="header_customer_form_login" ifconfig="porto_settings/header/login_popup" template="Smartwave_Porto::html/login.phtml"/>-->
+                <!--<block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>-->
+                <block class="Magento\Framework\View\Element\Template" name="top.search" template="Magento_Search::form.mini.phtml" />
+            </block>
+        </referenceContainer>
+
+        <referenceContainer name="header.container" remove="true"/>
+        <move element="navigation.sections" destination="sow.header"/>
+        <move element="top.search" destination="sow.header"/>
+        <move element="minicart" destination="sow.header"/>
+        <move element="header.links" destination="sow.header"/>
+        <move element="currency" destination="sow.header"/>
+        <move element="logo" destination="sow.header"/>
+        <move element="store_language" destination="sow.header"/>
+        <move element="skip_to_content" destination="sow.header"/>
+
+
         <referenceContainer name="footer-container" htmlClass="footer">
             <referenceContainer name="footer" htmlClass="footer-content">
                 <block class="SoW\Base\Block\Footer\Template" name="footer.block" template="SoW_Base::footer/footer.phtml">
                     <block class="Magento\Store\Block\Switcher" name="store_switcher" template="SoW_Base::footer/switch_stores.phtml"/>
-                    <block class="Magento\Newsletter\Block\Subscribe" name="footer.newsletter" template="SoW_Base::footer/subscribe.phtml"/>
                 </block>
             </referenceContainer>
         </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block name="body.end" class="SoW\Base\Block\Footer\BodyEnd" template="SoW_Base::back_top.phtml" >
+                <block class="Magento\Framework\View\Element\Template" name="catalog.compare.link" before="-" template="SoW_Base::product/compare/link.phtml">
+                    <arguments>
+                        <argument name="jsLayout" xsi:type="array">
+                            <item name="components" xsi:type="array">
+                                <item name="compareProducts" xsi:type="array">
+                                    <item name="component" xsi:type="string">Magento_Catalog/js/view/compare-products</item>
+                                </item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+
         <referenceBlock name="footer_links" remove="true"/>
         <referenceBlock name="form.subscribe" remove="true"/>
         <referenceBlock name="copyright" remove="true"/>
-        <referenceContainer name="before.body.end">
-            <block name="before.body.end.totop" class="Magento\Framework\View\Element\Template" template="SoW_Base::to_top.phtml" />
-        </referenceContainer>
     </body>
 </page>

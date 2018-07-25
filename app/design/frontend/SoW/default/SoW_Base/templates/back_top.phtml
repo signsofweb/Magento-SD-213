@@ -1,0 +1,15 @@
+<div class="before-body-end">
+    <?php echo $this->getChildHtml("catalog.compare.link"); ?>
+    <a href="javascript:void(0)" id="back-top" title="<?php echo __('Back Top')?>"><i class="fa fa-chevron-up"></i></a>
+</div>
+
+<script>
+    require([
+        'jquery',
+    ], function ($) {
+        'use strict';
+        $('#back-top').click(function () {
+            $('html, body').animate({scrollTop: 0}, 600);
+        });
+    })
+</script>

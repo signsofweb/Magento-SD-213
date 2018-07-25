@@ -1,8 +1,27 @@
 <div class="footer-top">
     <h3>top</h3>
 </div>
-<div class="footer-center">
-    <h3>center</h3>
+<?php
+$contact_us = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-middle-contact-us')->toHtml();
+$newsletter = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-middle-newsletter')->toHtml();
+$payment = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-middle-payment')->toHtml();
+?>
+<div class="footer-middle">
+   <div class="container">
+       <div class="row">
+            <div class="footer-block">
+                <?php echo $contact_us;?>
+            </div>
+            <div class="footer-block">
+                <?php echo $payment;?>
+            </div>
+            <div class="footer-block">
+                <div class="sow-newsletter">
+                    <?php echo $newsletter; ?>
+                </div>
+            </div>
+       </div>
+   </div>
 </div>
 <?php
 $copyright = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('footer-bottom-copyright')->toHtml();
@@ -11,8 +30,12 @@ $social = $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockI
 <div class="footer-bottom">
     <div class="container">
         <div class="row">
-           <div class="sow-copyright"><?php echo $copyright;?></div>
-            <div class="sow-social"><?php echo $social;?></div>
+            <div class="footer-block">
+                <div class="sow-copyright"><?php echo $copyright;?></div>
+            </div>
+            <div class="footer-block">
+                <div class="sow-social"><?php echo $social;?></div>
+            </div>
         </div>
     </div>
 </div>
