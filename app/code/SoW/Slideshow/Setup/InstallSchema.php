@@ -34,7 +34,7 @@ class InstallSchema implements InstallSchemaInterface
                 ->addColumn('slider_order', Table::TYPE_INTEGER, 10, ['nullable' => true], 'Slider order')
                 ->addColumn('slider_status', Table::TYPE_INTEGER, 1, ['nullable' => true,'default' => '1'], 'Slider status')
                 ->addColumn('slider_cms_id', Table::TYPE_INTEGER, null, ['nullable' => true], 'Cms block id')
-                ->addColumn('store_ids', Table::TYPE_TEXT, '64k', ['unsigned' => true, 'nullable' => false, 'default' => null], 'Store IDs')
+                ->addColumn('store_ids', Table::TYPE_TEXT, 255, ['unsigned' => true, 'nullable' => false, 'default' => null], 'Store IDs')
                 ->setComment('Slider Table');
             $installer->getConnection()->createTable($table);
         }

@@ -49,7 +49,9 @@
                 </block>
             </block>
         </referenceContainer>
-
+        <referenceContainer name="after.body.start">
+            <block class="Magento\Framework\View\Element\Template" name="footer.base.js" template="SoW_Base::footer_script.phtml"/>
+        </referenceContainer>
         <referenceBlock name="footer_links" remove="true"/>
         <referenceBlock name="form.subscribe" remove="true"/>
         <referenceBlock name="copyright" remove="true"/>

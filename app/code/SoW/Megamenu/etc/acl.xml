@@ -6,6 +6,13 @@
                 <resource id="SoW_Megamenu::megamenu_section" title="Megamenu" sortOrder="10">
                     <resource id="SoW_Megamenu::megamenu_manage" title="Manage Megamenu" sortOrder="100"/>
                 </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="SoW_Megamenu::megamenu_config" title="Megamenu"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

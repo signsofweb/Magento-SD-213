@@ -5,7 +5,12 @@ $items = $block->getItems();
 $html = $block->drawMenu($items, $parent_id = 0);
 
 ?>
+<div class="button">
 
+    <a href="http://magento.build/admin/megamenu/item/create">New Root Menu</a>
+    <br>
+    <a href="http://magento.build/admin/megamenu/item/new">New Item</a>
+</div>
 <div id="sow_menu">
     <?php echo $html;?>
 </div>

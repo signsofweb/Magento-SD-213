@@ -36,5 +36,6 @@ class Options extends StoreOptions
         $this->options = array_values($this->currentOptions);
 
         return $this->options;
+
     }
 }

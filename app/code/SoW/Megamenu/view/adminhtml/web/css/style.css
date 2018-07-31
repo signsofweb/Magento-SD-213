@@ -1,3 +1,7 @@
 #sow_menu ul li{
     padding:5px 15px;
+
+}
+#sow_menu ul li.active{
+    color: red;
 }

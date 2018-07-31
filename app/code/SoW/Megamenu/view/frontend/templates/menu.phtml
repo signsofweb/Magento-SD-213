@@ -1,26 +1,13 @@
 <?php
 
-$items = $block->getLv0Item();
+$menu = $block->getMenu();
 
 //$html = $block->drawMenu($items, $parent_id = 0,$lv = 1);
 
 ?>
-<?php if(false):?>
-<nav class="navigation" data-action="navigation">
-    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
-       <?php foreach ($items as $item):?>
-
-        <?php
-            $subItems = $block->getchildItems($item['item_id']);
-            $html = $block->drawSubMenu($subItems,$item['item_id'],2);
-           ?>
-            <li>
-                <?php echo $item['item_name'];
-                    echo $html;
-                ?>
-            </li>
-        <?php endforeach; ?>
+<nav id="megamenu" class="navigation" data-action="navigation">
+    <ul>
+        <?php echo $menu;?>
     </ul>
 </nav>
-<?php endif;?>
 

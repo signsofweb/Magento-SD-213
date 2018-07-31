@@ -5,7 +5,7 @@
  */
 namespace SoW\Megamenu\Controller\Adminhtml\Item;
 
-class Edit extends \Magento\Backend\App\Action
+class EditMenu extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

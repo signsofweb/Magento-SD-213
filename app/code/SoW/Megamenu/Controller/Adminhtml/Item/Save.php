@@ -76,17 +76,6 @@ class Save extends \Magento\Backend\App\Action
             if (empty($data['item_id'])) {
                 $data['item_id'] = null;
             }
-            if (empty($data['item_images'])) {
-                $data['item_image'] = null;
-            } else {
-                if ($data['item_images'][0] && $data['item_images'][0]['name']){
-                    $data['item_image'] = $data['item_images'][0]['name'];
-                }
-                else{
-                    $data['item_image'] = null;
-                }
-
-            }
             if (empty($data['store_ids'])) {
                 $data['store_ids'] = 0;
             }elseif(in_array(0,$data['store_ids'])){

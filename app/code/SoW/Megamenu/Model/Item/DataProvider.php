@@ -36,7 +36,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function prepareMeta(array $meta)
     {
+
         return $meta;
+
     }
 
     /**
@@ -63,7 +65,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $this->loadedData[$item->getId()] = $item->getData();
             $this->dataPersistor->clear('item');
         }
-
         return $this->loadedData;
     }
 }

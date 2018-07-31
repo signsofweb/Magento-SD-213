@@ -5,11 +5,13 @@
         <?php echo $this->getChildHtml("store_language"); ?>
     </div>
     <div class="header-content">
-        <?php echo $this->getChildHtml("logo"); ?>
-
-        <?php echo $this->getChildHtml("minicart"); ?>
-        <?php echo $this->getChildHtml("top.search"); ?>
+       <div class="container">
+           <div class="row">
+               <?php echo $this->getChildHtml("logo"); ?>
+               <?php echo $this->getChildHtml("minicart"); ?>
+               <?php echo $this->getChildHtml("top.search"); ?>
+           </div>
+       </div>
     </div>
-    <?php echo $this->getChildHtml("navigation.sections"); ?>
-
+    <div class="container"><?php echo $this->getChildHtml("navigation.sections"); ?></div>
 </header>

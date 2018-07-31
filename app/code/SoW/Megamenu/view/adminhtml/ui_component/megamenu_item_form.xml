@@ -57,6 +57,17 @@
                 </item>
             </argument>
         </field>
+        <field name="parent">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">item</item>
+                    <item name="dataScope" xsi:type="string">parent</item>
+                </item>
+            </argument>
+        </field>
         <field name="is_active">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -92,6 +103,22 @@
                 </item>
             </argument>
         </field>
+        <field name="parent_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\ParentId</item>
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">int</item>
+                    <item name="label" xsi:type="string" translate="true">Parent Id</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">item</item>
+                    <item name="sortOrder" xsi:type="number">21</item>
+                    <item name="dataScope" xsi:type="string">parent_id</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
     <fieldset name="information">
         <argument name="data" xsi:type="array">
@@ -101,32 +128,88 @@
                 <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
-        <field name="storeviews">
+        <field name="link_type">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\Options</item>
+                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\LinkType</item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">int</item>
-                    <item name="label" xsi:type="string" translate="true">Store View</item>
-                    <item name="formElement" xsi:type="string">multiselect</item>
+                    <item name="label" xsi:type="string" translate="true">Link type</item>
+                    <item name="component" xsi:type="string">SoW_Megamenu/js/form/element/linktype</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">item</item>
+                    <item name="dataScope" xsi:type="string">link_type</item>
                     <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="dataScope" xsi:type="string">store_ids</item>
-                    <item name="default" xsi:type="string">0</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
                 </item>
             </argument>
         </field>
-        <field name="item_link">
+        <field name="category_link">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\Category</item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Category Link</item>
+
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">item</item>
+                    <item name="dataScope" xsi:type="string">category_link</item>
+                    <item name="visibleValue" xsi:type="string">2</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </field>
+        <field name="custom_link">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Item link</item>
+                    <item name="label" xsi:type="string" translate="true">Custom link</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="dataScope" xsi:type="string">item_link</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataScope" xsi:type="string">custom_link</item>
+                    <item name="visibleValue" xsi:type="string">1</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </field>
+        <field name="link_target">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\LinkTarget</item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Link Target</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">item</item>
+                    <item name="dataScope" xsi:type="string">link_target</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="display">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\Display</item>
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Display</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">item</item>
+                    <item name="dataScope" xsi:type="string">display</item>
+                    <item name="sortOrder" xsi:type="number">45</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
@@ -140,7 +223,7 @@
                     <item name="label" xsi:type="string" translate="true">Icon classes</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
                     <item name="dataScope" xsi:type="string">icon_classes</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
@@ -155,7 +238,7 @@
                     <item name="label" xsi:type="string" translate="true">Item label</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
                     <item name="dataScope" xsi:type="string">item_label</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
@@ -178,7 +261,6 @@
                 </item>
             </argument>
         </field>
-
     </fieldset>
     <fieldset name="dropdown">
         <argument name="data" xsi:type="array">
@@ -228,86 +310,177 @@
         </field>
         <field name="dropdown_alignment">
             <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Dropdown alignment</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
-                    <item name="dataScope" xsi:type="string">dropdown_alignment</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
+                    <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\DropdownAlignment</item>
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Dropdown Alignment</item>
+                        <item name="visible" xsi:type="boolean">true</item>
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="dataScope" xsi:type="string">dropdown_alignment</item>
+                        <item name="sortOrder" xsi:type="number">30</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.parentName }.dropdown_enable:checked</item>
+                        </item>
                     </item>
-                    <item name="imports" xsi:type="array">
-                        <item name="visible" xsi:type="string">${ $.parentName }.dropdown_enable:checked</item>
-                    </item>
-                </item>
             </argument>
         </field>
-    </fieldset>
-    <fieldset name="main">
+        <fieldset name="dropdown_main_content">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Main content</item>
+                <item name="label" xsi:type="string" translate="true">Main Content</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">40</item>
             </item>
         </argument>
-        <field name="main_enable">
+            <field name="main_enable">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">10</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="prefer" xsi:type="string">toggle</item>
+                        <item name="label" xsi:type="string" translate="true">Enable main content</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">1</item>
+                            <item name="false" xsi:type="string">0</item>
+                        </item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="default" xsi:type="string">0</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="main_width">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="label" xsi:type="string" translate="true">Main width</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="sortOrder" xsi:type="number">20</item>
+                        <item name="dataScope" xsi:type="string">main_width</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.parentName }.main_enable:checked</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="main_column">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="label" xsi:type="string" translate="true">Main column</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="sortOrder" xsi:type="number">30</item>
+                        <item name="dataScope" xsi:type="string">main_column</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.parentName }.main_enable:checked</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
+        <fieldset name="dropdown_custom_html">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="source" xsi:type="string">item</item>
-                    <item name="prefer" xsi:type="string">toggle</item>
-                    <item name="label" xsi:type="string" translate="true">Enable main content</item>
-                    <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="string">1</item>
-                        <item name="false" xsi:type="string">0</item>
-                    </item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
-                    </item>
-                    <item name="default" xsi:type="string">0</item>
+                    <item name="label" xsi:type="string" translate="true">Custom HTML</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
                 </item>
             </argument>
-        </field>
-        <field name="main_width">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Main width</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="dataScope" xsi:type="string">main_width</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
+            <field name="custom_html_enable">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">10</item>
+                        <item name="dataType" xsi:type="string">boolean</item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="prefer" xsi:type="string">toggle</item>
+                        <item name="label" xsi:type="string" translate="true">Enable Custom HTML</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">1</item>
+                            <item name="false" xsi:type="string">0</item>
+                        </item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="default" xsi:type="string">0</item>
                     </item>
-                    <item name="imports" xsi:type="array">
-                        <item name="visible" xsi:type="string">${ $.parentName }.main_enable:checked</item>
+
+                </argument>
+            </field>
+            <field name="html_position">
+                <argument name="data" xsi:type="array">
+                    <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\HtmlPosition</item>
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">HTML Position</item>
+                        <item name="visible" xsi:type="boolean">true</item>
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="dataScope" xsi:type="string">html_position</item>
+                        <item name="sortOrder" xsi:type="number">30</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.parentName }.custom_html_enable:checked</item>
+                        </item>
                     </item>
-                </item>
-            </argument>
-        </field>
-        <field name="main_column">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Main column</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="dataScope" xsi:type="string">main_column</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">false</item>
+                </argument>
+            </field>
+            <field name="html_width">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="label" xsi:type="string" translate="true">HTML width</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="sortOrder" xsi:type="number">40</item>
+                        <item name="dataScope" xsi:type="string">html_width</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">false</item>
+                        </item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.parentName }.custom_html_enable:checked</item>
+                        </item>
                     </item>
-                    <item name="imports" xsi:type="array">
-                        <item name="visible" xsi:type="string">${ $.parentName }.main_enable:checked</item>
+                </argument>
+            </field>
+            <field name="custom_html">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">50</item>
+                        <item name="label" xsi:type="string"/>
+                        <item name="formElement" xsi:type="string">wysiwyg</item>
+                        <item name="source" xsi:type="string">item</item>
+                        <item name="wysiwyg" xsi:type="boolean">true</item>
+                        <item name="dataScope" xsi:type="string">custom_html</item>
+                        <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${ $.parentName }.custom_html_enable:checked</item>
+                        </item>
                     </item>
-                </item>
-            </argument>
-        </field>
+                </argument>
+            </field>
+
+        </fieldset>
     </fieldset>
+
 </form>
