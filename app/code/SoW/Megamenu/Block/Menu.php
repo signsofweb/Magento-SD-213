@@ -62,7 +62,7 @@ class Menu extends \Magento\Backend\Block\Template
         if ($collection->count() > 0) {
             foreach ($collection as $item) {
                 $html .= '<li class="menu-item level-1' . ' ' . $this->getItemClass($item) . '">';
-                $html .= '<a>';
+                $html .= '<a href="#">';
                 $html .= $item->getName();
                 $html .= '</a>';
                 $subChildHtml = $this->getSubmenu($item);
@@ -89,6 +89,10 @@ class Menu extends \Magento\Backend\Block\Template
         $customHtml = $this->getCustomHtml($item);
         $htmlPosition = $item->getHtmlPosition();
             if ($item->getDropdownEnable() == 1) {
+                $width = $item->getDropdownWidth();
+                $dropdownWidth = ($width)? $width : '1170px';
+                $html .= '<div class="submenu sub-dropdown" style="width:'.$dropdownWidth.'">';
+            }else{
                 $html .= '<div class="submenu">';
             }
             if ($htmlPosition == 1 && $customHtml != '') {
@@ -108,7 +112,7 @@ class Menu extends \Magento\Backend\Block\Template
                     $html .= '<ul>';
                     foreach ($collection as $itemChild) {
                         $html .= '<li class="menu-item level-'.$lv . ' ' . $this->getItemClass($itemChild) . '">';
-                        $html .= '<a>';
+                        $html .= '<a href="#">';
                         $html .= $itemChild->getName();
                         $html .= '</a>';
                         $subChildHtml = $this->getSubmenu($itemChild,(int)$lv+1);
