@@ -16,19 +16,19 @@ class DropdownAlignment implements OptionSourceInterface
         $arr = [];
         $arr[]=[
             'value' => 1,
-            'label' => 'From left item'
-        ];
-        $arr[]=[
-            'value' => 2,
             'label' => 'From right item'
         ];
         $arr[]=[
+            'value' => 2,
+            'label' => 'From left item'
+        ];
+        $arr[]=[
             'value' => 3,
-            'label' => 'From left menu'
+            'label' => 'From right menu'
         ];
         $arr[]=[
             'value' => 4,
-            'label' => 'From right menu'
+            'label' => 'From left menu'
         ];
         return $arr;
     }

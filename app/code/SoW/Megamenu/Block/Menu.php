@@ -50,7 +50,6 @@ class Menu extends \Magento\Backend\Block\Template
     {
         $parentsId = $this->getParentsItemId();
         $collection = $this->_itemFactory->create()->getCollection();
-
         $collection->addFieldToFilter('is_active', ['eq' => 1])->addOrder('item_order', 'ASC')
             ->addFieldToFilter('parent_id', $parentsId);
         return $collection;
@@ -66,87 +65,80 @@ class Menu extends \Magento\Backend\Block\Template
                 $html .= '<a>';
                 $html .= $item->getName();
                 $html .= '</a>';
-                $customHtml = $this->getCustomHtml($item);
                 $subChildHtml = $this->getSubmenu($item);
-                if ($item->getDropdownEnable() == 1) {
-                    $html .= '<div class="submenu">';
-
-                    if ($subChildHtml != '' || $customHtml != '') {
-                        if ($item->getHtmlPosition() == 1 && $customHtml != '') {
-                            $html .= '<div class="submenu-header">';
-                            $html .= $customHtml;
-                            $html .= '</div>'; /* End Sub Header*/
-                        };
-
-                        if ($item->getMainEnable() == 1 || ($item->getHtmlPosition() == 2 && $customHtml != '') || ($item->getHtmlPosition() == 4 && $customHtml != '')) {
-                            $html .= '<div class="submenu-middle">';
-                            if ($item->getHtmlPosition() == 4 && $customHtml != '') {
-                                $html .= '<div clsas="main-left">';
-                                $html .= $customHtml;
-                                $html .= '</div>';
-                            }
-                            if ($subChildHtml != '' && $item->getMainEnable() == 1) {
-                                $html .= '<div class="main-content">';
-                                $html .= $subChildHtml;
-                                $html .= '</div>';
-                            }
-                            if ($item->getHtmlPosition() == 2 && $customHtml != '') {
-                                $html .= '<div clsas="main-right">';
-                                $html .= $customHtml;
-                                $html .= '</div>';
-                            }
-                            $html .= '</div>';/*End submenu-middle*/
-                        }
-
-                        if ($item->getHtmlPosition() == 3 && $customHtml != '') {
-                            $html .= '<div class="submenu-bottom">';
-                            $html .= $customHtml;
-                            $html .= '</div>'; /* End Sub Header*/
-                        };
-                    }
-                }else {
+                if ($subChildHtml != '') {
                     $html .= $subChildHtml;
                 }
+
                 $html .= '</li>';
             }
         }
         return $html;
     }
 
-    public function getSubmenu($item)
+    public function getSubmenu($item, $lv = 2)
     {
-        $subHtml = '';
+        $html = '';
         $id = $item->getId();
         $collection = $this->_itemFactory->create()->getCollection();
         if ($id) {
             $collection->addFieldToFilter('is_active', ['eq' => 1])
                 ->addFieldToFilter('parent_id', $id);
         }
-        if ($collection->count() > 0) {
-            $subHtml .='<ul>';
-            foreach ($collection as $item) {
-                $subHtml .= '<li>';
-                $subHtml .= '<a>';
-                $subHtml .= $item->getName();
-                $subHtml .= '</a>';
-                $subChildHtml = $this->getSubmenu($item);
-                if ($subChildHtml) {
-                    $subHtml .= '<div class="submenu">';
-                    $subHtml .= '<ul>';
-                    $subHtml .= $subChildHtml;
-                    $subHtml .= '</ul>';
-                    $subHtml .= '</div>';
-                }
-                $subHtml .= '</li>';
+        $count = $collection->count();
+        $customHtml = $this->getCustomHtml($item);
+        $htmlPosition = $item->getHtmlPosition();
+            if ($item->getDropdownEnable() == 1) {
+                $html .= '<div class="submenu">';
             }
-            $subHtml .= '</ul>';
+            if ($htmlPosition == 1 && $customHtml != '') {
+                $html .= '<div class="submenu-header">';
+                $html .= $customHtml;
+                $html .= '</div>'; /* End Sub Header*/
+            };
+            if ($count > 0 || ($htmlPosition == 2 && $customHtml != '') || ($htmlPosition == 4 && $customHtml != '')) {
+                $html .= '<div class="submenu-middle">';
+                if ($htmlPosition == 4 && $customHtml != '') {
+                    $html .= '<div clsas="main-left">';
+                    $html .= $customHtml;
+                    $html .= '</div>';
+                }
+                if ($count > 0) {
+                    $html .= '<div class="main-content">';
+                    $html .= '<ul>';
+                    foreach ($collection as $itemChild) {
+                        $html .= '<li class="menu-item level-'.$lv . ' ' . $this->getItemClass($itemChild) . '">';
+                        $html .= '<a>';
+                        $html .= $itemChild->getName();
+                        $html .= '</a>';
+                        $subChildHtml = $this->getSubmenu($itemChild,(int)$lv+1);
+                        if ($subChildHtml != '') {
+                            $html .= $subChildHtml;
+                        }
+                        $html .= '</li>';
+                    }
+                    $html .= '<ul>';
 
-        }
-        if ($subHtml != '') {
-            return $subHtml;
-        }
-        return false;
+                    $html .= '</div>'; /* End Main content */
+                }
+                if ($htmlPosition == 2 && $customHtml != '') {
+                    $html .= '<div clsas="main-right">';
+                    $html .= $customHtml;
+                    $html .= '</div>';
+                }
+                $html .= '</div>';/*End submenu-middle*/
+            }
 
+            if ($htmlPosition == 3 && $customHtml != '') {
+                $html .= '<div class="submenu-bottom">';
+                $html .= $customHtml;
+                $html .= '</div>'; /* End Sub Header*/
+            };
+
+            if ($item->getDropdownEnable() == 1) {
+                $html .= '</div>';
+            }
+        return $html;
     }
 
     public function getCustomHtml($item)
