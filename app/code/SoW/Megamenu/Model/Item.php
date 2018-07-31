@@ -32,13 +32,28 @@ class Item extends AbstractModel
     {
         return $this->getData('dropdown_enable');
     }
+
     public function getDropdownWidth()
     {
         return $this->getData('dropdown_width');
     }
 
+    public function getMainWidth()
+    {
+        return $this->getData('main_width');
+    }
+
+    public function getMainColumn()
+    {
+        return $this->getData('main_column');
+    }
+
     public function getCustomHtml(){
         return $this->getData('custom_html');
+    }
+
+    public function getCustomHtmlWidth(){
+        return $this->getData('html_width');
     }
 
     public function getHtmlPosition(){

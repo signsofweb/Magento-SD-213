@@ -87,14 +87,17 @@ class Menu extends \Magento\Backend\Block\Template
         }
         $count = $collection->count();
         $customHtml = $this->getCustomHtml($item);
+        $enableDropdown = $item->getDropdownEnable();
         $htmlPosition = $item->getHtmlPosition();
-            if ($item->getDropdownEnable() == 1) {
+            if ( $enableDropdown == 1) {
                 $width = $item->getDropdownWidth();
                 $dropdownWidth = ($width)? $width : '1170px';
                 $html .= '<div class="submenu sub-dropdown" style="width:'.$dropdownWidth.'">';
             }else{
                 $html .= '<div class="submenu">';
             }
+            $customHtmlWidth = $item->getCustomHtmlWidth();
+            $htmlWidth = ($customHtmlWidth != '') ? $customHtmlWidth : '100%';
             if ($htmlPosition == 1 && $customHtml != '') {
                 $html .= '<div class="submenu-header">';
                 $html .= $customHtml;
@@ -103,12 +106,14 @@ class Menu extends \Magento\Backend\Block\Template
             if ($count > 0 || ($htmlPosition == 2 && $customHtml != '') || ($htmlPosition == 4 && $customHtml != '')) {
                 $html .= '<div class="submenu-middle">';
                 if ($htmlPosition == 4 && $customHtml != '') {
-                    $html .= '<div clsas="main-left">';
+                    $html .= '<div clsas="main-left" style="width: '.$htmlWidth.';">';
                     $html .= $customHtml;
                     $html .= '</div>';
                 }
                 if ($count > 0) {
-                    $html .= '<div class="main-content">';
+                    $mainWidth = $item->getMainWidth();
+                    $mW = ($mainWidth != '') ? $mainWidth : '100%';
+                    $html .= '<div class="main-content '.$this->getMainClass($item).'" style="width: '.$mW.'">';
                     $html .= '<ul>';
                     foreach ($collection as $itemChild) {
                         $html .= '<li class="menu-item level-'.$lv . ' ' . $this->getItemClass($itemChild) . '">';
@@ -126,7 +131,7 @@ class Menu extends \Magento\Backend\Block\Template
                     $html .= '</div>'; /* End Main content */
                 }
                 if ($htmlPosition == 2 && $customHtml != '') {
-                    $html .= '<div clsas="main-right">';
+                    $html .= '<div class="main-right" style="width: '.$htmlWidth.'">';
                     $html .= $customHtml;
                     $html .= '</div>';
                 }
@@ -158,16 +163,40 @@ class Menu extends \Magento\Backend\Block\Template
         $alignment = $item->getAlignment();
         switch ($alignment) {
             case 1:
-                $class .= 'menu-item-relative from-left';
+                $class = 'menu-item-relative from-right';
                 break;
             case  2:
-                $class .= 'menu-item-relative from-right';
+                $class = 'menu-item-relative from-left';
                 break;
             case  3:
-                $class .= 'relative-left';
+                $class = 'relative-right';
                 break;
             case  4:
-                $class .= 'relative-right';
+                $class .= 'relative-left';
+                break;
+        }
+        return $class;
+    }
+
+    public function getMainClass($item)
+    {
+        $class = '';
+        $mainColumn = $item->getMainColumn();
+        switch ($mainColumn) {
+            case 1:
+                $class = 'main-col-1';
+                break;
+            case  2:
+                $class .= 'main-col-2';
+                break;
+            case  3:
+                $class .= 'main-col-3';
+                break;
+            case  4:
+                $class .= 'main-col-4';
+                break;
+            case  5:
+                $class .= 'main-col-5';
                 break;
         }
         return $class;

@@ -355,16 +355,19 @@
         </field>
         <field name="main_column">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">SoW\Megamenu\Ui\Component\Listing\Column\Item\MainColumn</item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Main column</item>
-                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Main Column</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">item</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
                     <item name="dataScope" xsi:type="string">main_column</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
+
                 </item>
             </argument>
         </field>

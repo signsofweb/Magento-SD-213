@@ -1,9 +1,10 @@
-#megamenu{
-  > ul{
-    > li{
+#megamenu {
+  > ul {
+    position: relative;
+    > li {
       display: inline-block;
-      margin:0;
-      > a{
+      margin: 0;
+      > a {
         padding: 0 20px;
         line-height: 50px;
         height: 50px;
@@ -11,19 +12,127 @@
       }
     }
   }
-  ul{
-    padding:0;
+  ul {
+    padding: 0;
   }
 }
-.menu-item-relative{
+
+.menu-item-relative {
   position: relative;
 }
-.from-left{
-  > .sub-dropdown{
+
+.from-left {
+  > .sub-dropdown {
     left: 0;
   }
 }
-.sub-dropdown{
+
+.from-right {
+  > .sub-dropdown {
+    right: 0;
+  }
+}
+
+.relative-left {
+  > .sub-dropdown {
+    left: 0;
+  }
+}
+
+.relative-right {
+  > .sub-dropdown {
+    right: 0;
+  }
+}
+
+.sub-dropdown {
+  top: auto;
+  opacity: 0;
+  visibility: hidden;
+  text-align: left;
+  background: #fff none repeat scroll 0 0;
+  display: block;
   position: absolute;
-  display: none;
+  left: auto;
+  right: auto;
+  z-index: 100;
+  border-top: 2px solid #006bb4;
+  transform: translateY(20px);
+  -webkit-transform: translateY(20px);
+  -ms-transform: translateY(20px);
+  padding: 15px 30px 15px;
+  box-shadow: 1px 5px 10px rgba(0, 0, 0, .35);
+  transition: all 300ms ease 0s;
+  -ms-transition: all 300ms ease 0s;
+  -webkit-transition: all 300ms ease 0s;
+  width: 100%;
+}
+
+#megamenu li:hover {
+  > .sub-dropdown {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.main-content {
+  display: inline-block;
+  > ul {
+    > li {
+      display: inline-block;
+    }
+  }
+}
+
+.main-col-1 {
+  > ul {
+    > li {
+      width: 100%;
+    }
+  }
+}
+
+.main-col-2 {
+  > ul {
+    > li {
+      width: 50%;
+    }
+  }
+}
+
+.main-col-3 {
+  > ul {
+    > li {
+      width: 33.33%;
+    }
+  }
+}
+
+.main-col-4 {
+  > ul {
+    > li {
+      width: 25%;
+    }
+  }
+}
+
+.main-col-5 {
+  > ul {
+    > li {
+      width: 20%;
+    }
+  }
+}
+
+.main-right {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.main-left {
+  display: inline-block;
+  vertical-align: top;
 }
